@@ -2,7 +2,7 @@
 
 Marcelix is a creator network for AI images, short videos, reusable templates, remixes, and Creator Rewards.
 
-The core idea is simple:
+## The core idea is simple:
 
 1. Create an image or video.
 2. Publish it as a reusable post.
