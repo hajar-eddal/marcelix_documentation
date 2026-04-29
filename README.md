@@ -1,622 +1,319 @@
-# Marcelix Creator Guide
+<p align="center">
+  <img src="./assets/logo-512.png" alt="Marcelix logo" width="112" />
+</p>
 
-Marcelix is a creator network for AI images, short videos, reusable templates, remixes, and Creator Rewards.
+<h1 align="center">Marcelix</h1>
 
-## The core idea is simple:
+<p align="center">
+  <strong>An AI-native social network for reusable images, videos, and remix chains.</strong>
+</p>
 
-1. Create an image or video.
-2. Publish it as a reusable post.
-3. Other creators remix it.
-4. Your best reusable ideas can keep earning attention, followers, and rewards over time.
+<p align="center">
+  Live product: <a href="https://www.marcelix.com">marcelix.com</a>
+</p>
 
-This guide explains how Marcelix works from a creator point of view: how discovery works, how remixing works, how prompt privacy works, how rewards work, and how to create posts that people actually want to remix.
+---
 
-Private implementation details, exact pricing, provider names, internal scoring weights, infrastructure secrets, and reward formulas are intentionally not included here. The app shows the current credit and reward values directly inside the product.
+Marcelix is a consumer product, not a framework.
 
-## Why Marcelix Exists
+This repo is meant to explain the product thesis and show the public surface area clearly, without disclosing the private operating details that make the network work.
 
-Most AI tools stop after generation. You type a prompt, get an image or video, download it, and leave.
+## The thesis
 
-Marcelix is built around a different loop:
+Most AI image and video products end at generation.
+
+You prompt, render, export, post somewhere else, and start over.
+
+That creates a dead-end workflow:
 
 ```text
-create -> publish -> discover -> remix -> reward -> repeat
+prompt -> output -> download -> post -> disappear
 ```
 
-Instead of treating generations as isolated files, Marcelix treats good generations as reusable creative starting points.
+Marcelix is built around a different assumption:
 
-A post can become:
+> the next AI-native social platform should not be a gallery of dead exports  
+> it should be a network of reusable creative states
 
-- a visual idea people like
-- a template other users remix
-- a trend seed
-- a style people recognize
-- a reason for people to follow you
-- a reward source when eligible remixes happen
+In Marcelix, a strong image or video is not just something to look at.
 
-The most successful creators on Marcelix are not only making good images. They are making ideas that other people want to use.
+It can become:
 
-## The Basic Flow
+- a public post
+- a reusable template
+- a remix source
+- an attribution root
+- a profile growth engine
+- a reward-generating asset when downstream remixes happen
 
-### 1. Generate Privately
+That changes the loop from:
 
-Every generation starts as a private draft. That means you can experiment without publishing unfinished work.
+```text
+generate -> post -> hope for likes
+```
 
-You can use private drafts to:
+to:
+
+```text
+generate -> publish -> remix -> attribution -> rewards -> stronger distribution
+```
+
+## What Marcelix is actually doing
+
+Marcelix combines five things that are usually scattered across different products:
+
+- AI image generation
+- AI video generation
+- public creator profiles and feeds
+- reusable remixable posts
+- creator rewards tied to downstream usage
+
+The product is opinionated around one idea:
+
+> useful creative work should stay alive after first publish
+
+Today, most creators either:
+
+- give away prompts for free to farm attention
+- send people to affiliate links for tiny payouts
+- post outputs that other people manually copy without attribution
+
+Marcelix tries to make the remix path native instead.
+
+If a creator publishes something reusable and someone else remixes it inside the network, the source relationship is preserved inside the product rather than lost in screenshots, copied prompts, or off-platform reposts.
+
+## What exists in the product today
+
+Publicly visible product primitives include:
+
+- private draft generation for images and videos
+- public post pages with shareable slugs
+- reusable posts that can become remix sources
+- prompt visibility controls
+- attribution preserved across remix chains
+- creator profiles that accumulate followers, posts, and remix activity
+- creator rewards tied to eligible downstream reuse
+- credit-based generation for image and video workflows
+
+## The core object model
+
+Marcelix is not organized around "a prompt feed."
+
+It is organized around a small set of product primitives:
+
+### 1. Private drafts
+
+Every generation starts private.
+
+That gives creators a place to:
 
 - test prompts
-- compare styles
-- prepare stronger titles
-- write better descriptions
-- decide whether the prompt should be public or hidden
-- publish only the versions that are worth showing
+- compare outputs
+- keep unfinished work out of the public feed
+- choose whether prompt text should ever be public
 
-Private drafts are for your own workflow. Public posts are for discovery.
+### 2. Public posts
 
-### 2. Publish Publicly
+A post is the public distribution surface.
 
-When you publish, Marcelix asks for the parts that help people understand and find the post:
+It carries:
 
+- media
 - title
 - description
 - tags
+- creator identity
 - remixability
-- prompt visibility
+- visibility rules
 
-If you hide the prompt, the description becomes more important. A hidden prompt post still needs public context so people can discover it, understand it, and decide whether to remix it.
+### 3. Reusable templates
 
-Good description:
+A reusable post is not just "liked content."
 
-```text
-A cinematic retro-future racing poster with neon rain, chrome cars, and a dramatic city skyline.
-```
+It is content that another creator can actually build from.
 
-Bad description:
+This is where Marcelix stops behaving like a normal AI gallery and starts behaving more like a creative graph.
 
-```text
-ultra detailed 8k prompt text, exact camera recipe, full private prompt...
-```
+### 4. Remix chains
 
-The description should explain the result, not leak your prompt.
+When a remix happens, the downstream work remains linked back to the upstream source.
 
-### 3. Let People Remix
+That enables:
 
-If a post is reusable, other creators can use it as a starting point.
+- attribution
+- template analytics
+- creator profile growth
+- rewards tied to usage instead of only raw impressions
 
-Remixing is designed to feel simple:
+## Why prompt privacy matters
 
-```text
-source template + user's edit idea -> new private draft -> optional public remix
-```
+One of the hard product problems here is that creators want two things at once:
 
-The original template stays linked, so the creator of the source can benefit from downstream activity.
+- public distribution
+- private recipes
 
-## Prompt Privacy
+Marcelix treats prompt privacy as a first-class product primitive instead of an afterthought.
 
-Prompt privacy is one of the most important parts of Marcelix.
+For original posts, creators can choose whether prompts are public or hidden.
 
-### Original Posts
+For remix posts, prompt text stays protected automatically.
 
-When you publish an original post, you choose whether the prompt is public or hidden.
+That means the public object is still discoverable through:
 
-Public prompt:
+- visuals
+- title
+- description
+- tags
+- creator identity
 
-- viewers can see the prompt
-- useful for educational posts
-- useful when you want people to learn from your process
-- useful when the prompt itself is part of the value
+without requiring creators to leak the exact text stack that produced the result.
 
-Hidden prompt:
+This matters because prompt sharing is not the only legitimate way to participate in generative culture. Sometimes the value is in teaching openly. Sometimes the value is in publishing the result while keeping the recipe private.
 
-- public viewers do not see the prompt
-- remixers do not receive the source prompt in the browser
-- the creator can still see/copy their own prompt in private owner tools
-- the public post relies on title, description, tags, and visuals for discovery
+Marcelix supports both.
 
-### Remix Posts
+## Why this is different from prompt marketplaces
 
-Remix posts keep prompts hidden automatically.
+Prompt marketplaces mostly treat prompts as the product.
 
-That means:
+Marcelix treats reuse as the product.
 
-- the original baseline is not exposed
-- the remixer's edit prompt is not exposed publicly
-- the published remix page does not show prompt text
-- the remixer can still see their own remix edits in private creator tools
+That sounds subtle, but it changes almost everything:
 
-This protects both sides:
+- the primary public unit is the result, not the raw prompt
+- remixing happens inside the network, not through copied text
+- attribution survives downstream usage
+- creator rewards can be tied to actual reuse activity
+- images and videos live in the same social and economic loop
 
-- the original creator's reusable idea
-- the remixer's added direction
+The bet is that AI-native social media will look less like "prompt dumping" and more like a reusable graph of creative transformations.
 
-### Private Drafts
+## Images and videos share the same loop
 
-Private drafts are different from public posts.
+Marcelix is built for both images and short videos.
 
-Inside a private draft, the creator can still see and copy their own prompt or remix edits. This is for workflow, not public display.
+That matters because most tools still split those into separate products, separate communities, or separate monetization paths.
 
-The rule is:
+Here, both can participate in the same creator loop:
 
 ```text
-public surface: protect hidden prompts
-private owner tools: let the creator manage their own prompt
+private draft -> public post -> reusable source -> remix -> reward
 ```
 
-## Recommendation Logic
+That lets a creator build a profile around:
 
-Marcelix discovery is designed to reward posts that people actually interact with, not just posts that are new.
+- static image templates
+- short video templates
+- meme formats
+- cinematic loops
+- aesthetic transformations
+- character or product remixes
 
-The feed looks at several categories of signals:
+without fragmenting their identity across different tools.
 
-- freshness
-- engagement
-- saves
-- comments
-- remix activity
-- creator follows
-- tag follows
-- post quality signals
-- safety and moderation status
-- whether a post is reusable
-- whether the post has enough public context when the prompt is hidden
+## What earns attention here
 
-The exact scoring is private and may change over time, but the general idea looks like this:
+Marcelix is not designed around "upload more."
 
-```ts
-type DiscoverySignals = {
-  freshness: number;
-  engagement: number;
-  remixMomentum: number;
-  creatorAffinity: number;
-  tagAffinity: number;
-  quality: number;
-  safety: number;
-};
+It is designed around making things other people want to reuse.
 
-function rankPost(signals: DiscoverySignals) {
-  if (signals.safety <= 0) return 0;
+The strongest posts usually do one or more of these well:
 
-  return (
-    signals.freshness +
-    signals.engagement +
-    signals.remixMomentum +
-    signals.creatorAffinity +
-    signals.tagAffinity +
-    signals.quality
-  ) * signals.safety;
-}
-```
+- instantly communicate a transformation
+- make the viewer imagine themselves in the template
+- map cleanly to a current internet format or meme
+- work as a profile-picture, poster, edit, intro clip, or aesthetic upgrade
+- keep enough context public even when the prompt stays hidden
 
-For creators, the lesson is simple:
+This leads to a different creator strategy:
 
-```text
-make people stop, react, save, comment, follow, and remix
-```
+- not just "make beautiful outputs"
+- but "make reusable outputs with strong downstream demand"
 
-The best Marcelix posts usually do at least one of these:
+## Creator economics
 
-- look instantly shareable
-- match a current online mood
-- make people laugh
-- make people imagine themselves inside the concept
-- solve a creative need
-- offer a reusable transformation
-- create a style that others want to apply to their own face, pet, brand, product, or story
-
-## Creator Rewards
-
-Creator Rewards are designed to reward useful reusable work.
+The reward model is intentionally downstream-focused.
 
 At a high level:
 
-1. You publish a reusable post.
+1. A creator publishes reusable work.
 2. Another creator remixes it.
-3. If the remix meets eligibility rules, a reward event can be created for you.
-4. Rewards go through a pending period.
-5. After clearing, available rewards can be used in supported ways inside Marcelix.
+3. If that remix is eligible, the source creator can accrue Creator Rewards.
+4. Rewards clear later and can be used in supported ways inside the product.
 
-The app can support reward actions like:
+The important design point is not the exact rate.
 
-- converting eligible rewards into credits
-- requesting payout when requirements are met
-- tracking pending, available, held, converted, requested, and paid states
+The important design point is that value is tied to reuse, not just impression farming.
 
-Exact rates, thresholds, timing, and payout rules are shown inside the app and may change as Marcelix grows.
+That is a more interesting primitive than:
 
-Important: rewards are not guaranteed income. They depend on eligible remix activity, platform rules, payment status, fraud checks, refunds, reversals, and payout availability.
+- posting prompts for free and hoping for followers
+- stuffing affiliate links into bios
+- getting copied without any native attribution path
 
-## How To Earn More Attention And Rewards
+## Product surfaces
 
-The best strategy is not to only make beautiful images. The best strategy is to build a remix loop.
+### Explore feed
 
-Think in two phases.
+The feed is not just a gallery. It is a discovery surface for reusable creative work.
 
-## Phase 1: Build Attention
+<img src="./assets/marcelix-home.webp" alt="Marcelix explore feed" width="100%" />
 
-First, make posts people want to look at, like, save, and share.
+### Pricing and rewards surface
 
-Good early content types:
+Credit packs and creator rewards are visible in the product, but the README intentionally avoids exposing private internal economics beyond what is public in the app.
 
-- memes
-- funny visual reactions
-- clean profile-picture ideas
-- dramatic poster concepts
-- trend-based images
-- before/after concepts
-- aesthetic wallpapers
-- pet transformations
-- fashion looks
-- cinematic portraits
-- short video loops
-- visual jokes around a current topic
+<img src="./assets/marcelix-pricing.webp" alt="Marcelix pricing and rewards" width="100%" />
 
-The goal of Phase 1 is to earn:
+### Public post and remix surface
 
-- follows
-- likes
-- saves
-- comments
-- profile visits
-- recognition
+A public post can act as both a media page and a reusable upstream source.
 
-Use tags honestly. If your post is about animals, use animal-related tags. If it is a fashion portrait, use fashion tags. If it is a short video loop, make that clear.
+<img src="./assets/marcelix-post.webp" alt="Marcelix public video post with remix chain" width="100%" />
 
-Do not spam irrelevant tags. It may get clicks once, but it weakens trust.
+## Why this can become a real network
 
-### Phase 1 Example
+A normal AI app produces outputs.
 
-Instead of:
+A social app produces attention.
 
-```text
-cool image
-```
+Marcelix is trying to produce compounding creative reuse.
 
-Try:
+That means one good post can do more than collect likes:
 
-```text
-Tiny cat CEO announcing a chaotic company meeting in a glass skyscraper
-```
+- it can pull in followers
+- it can become a template
+- it can travel off-platform and pull people back in
+- it can generate a remix thread
+- it can keep paying attention back to the original creator
 
-Why it works:
+If that works, the network gets stronger as reusable content accumulates.
 
-- clear subject
-- funny situation
-- easy to understand
-- shareable
-- remixable into other animals, jobs, or locations
+## What this public repo intentionally does not disclose
 
-## Phase 2: Build Remix Engines
+This repository is public-facing on purpose, but it is not a blueprint for cloning the private parts of the system.
 
-Once people recognize your work, start publishing posts designed to be remixed.
+So this README does **not** include:
 
-A remix engine is a post where another person can easily imagine uploading a reference, changing one detail, and getting something personal.
+- ranking weights
+- anti-abuse logic
+- fraud thresholds
+- exact reward formulas
+- provider mix
+- internal moderation heuristics
+- infrastructure details
+- proprietary growth or economics tuning
 
-Strong remix-engine formats:
+The goal is to explain the product clearly without handing competitors the private operating details.
 
-- face-to-theme transformations
-- outfit transformations
-- pet poster transformations
-- profile-picture filters
-- video effects
-- cinematic intro clips
-- sports-card style portraits
-- magazine cover styles
-- album-cover styles
-- retro game character looks
-- fantasy character upgrades
-- old-me / young-me emotional concepts
-- glow-up edits
-- product mockup styles
-- creator brand templates
+## In one sentence
 
-The key question:
+Marcelix is a bet that AI-generated media should not end as disposable files.
 
-```text
-Can another person make this about themselves in one sentence?
-```
+It should become reusable social objects that can be remixed, attributed, discovered, and economically connected back to the creator who started the chain.
 
-If yes, it can become a strong remix template.
+## Links
 
-## Remix Ideas That Can Travel Online
-
-Use culturally familiar formats without copying protected characters, logos, or exact copyrighted designs.
-
-Better:
-
-```text
-open-world crime game poster energy, neon city, dramatic pose, custom outfit
-```
-
-Risky:
-
-```text
-make me the exact main character from a famous game with the real logo
-```
-
-Better:
-
-```text
-superhero comic cover energy, bold ink, dramatic skyline, original costume
-```
-
-Risky:
-
-```text
-make me an exact famous superhero
-```
-
-Better:
-
-```text
-pirate-anime adventure poster style, ocean wind, original crew outfit, bright expressive colors
-```
-
-Risky:
-
-```text
-make me a specific copyrighted anime character
-```
-
-Better:
-
-```text
-romantic ocean-era movie poster mood, elegant formal clothing, golden sunset, original characters
-```
-
-Risky:
-
-```text
-copy a famous movie poster exactly
-```
-
-This keeps your content more brand-safe, more platform-safe, and more remixable.
-
-## What Makes A Post Remixable
-
-A strong remixable post usually has:
-
-- a clear transformation
-- a strong visual promise
-- a simple title
-- a description people understand quickly
-- tags that match the use case
-- a result that looks good even before reading the prompt
-
-Examples:
-
-```text
-"Turn your pet into a royal oil painting"
-```
-
-```text
-"Make your selfie look like a cinematic racing poster"
-```
-
-```text
-"Create a dreamy young-me-meets-future-me portrait"
-```
-
-```text
-"Convert a product photo into a luxury ad campaign frame"
-```
-
-```text
-"Make a 5-second neon intro from a single portrait"
-```
-
-These are strong because the viewer immediately understands what they can do with it.
-
-## How To Write Better Titles
-
-Your title should sell the result, not describe every technical detail.
-
-Good titles:
-
-- Neon Rain Racing Poster
-- Royal Pet Portrait
-- Future Me Hugging Young Me
-- Cyberpunk Fashion Cover
-- Dream Kitchen Product Ad
-- Anime Adventure Crew Portrait
-- Vintage Sports Card Hero Shot
-
-Weak titles:
-
-- My image
-- Test generation
-- Prompt 44
-- Cool style
-- Remix this please
-
-## How To Write Better Descriptions
-
-Descriptions help people understand your post when the prompt is hidden.
-
-Good description:
-
-```text
-A cinematic profile-poster concept for turning a portrait into a neon racing character with rain, motion blur, and a dramatic city backdrop.
-```
-
-Why it works:
-
-- explains the result
-- does not expose the full prompt
-- helps search and discovery
-- tells remixers what the template is for
-
-Weak description:
-
-```text
-full prompt pasted here with every private detail
-```
-
-The public description should be a user-facing explanation, not your private recipe.
-
-## How To Use Tags
-
-Tags help the right audience find the post.
-
-Use tags that describe:
-
-- subject
-- style
-- format
-- use case
-- community interest
-
-Examples:
-
-- `#Fashion`
-- `#Anime`
-- `#Animals`
-- `#Travel`
-- `#Architecture`
-- `#Food`
-- `#Fantasy`
-- `#Realistic`
-- `#Artistic`
-- `#Abstract`
-
-If you share externally, match the external audience too.
-
-For example:
-
-- AI art communities
-- creator communities
-- meme communities
-- design communities
-- pet communities
-- fashion communities
-- short-video communities
-
-Do not spam. Share where the content actually fits.
-
-## External Sharing Strategy
-
-Marcelix posts are strongest when they leave Marcelix and come back with new users.
-
-Good places to share:
-
-- your Instagram page
-- short-video platforms
-- Reddit communities that allow AI content
-- Discord creator groups
-- design communities
-- personal newsletters
-- group chats
-- portfolio pages
-
-When sharing externally, do not only say "check my post."
-
-Say what the person can do with it:
-
-```text
-I made a remixable template that turns a portrait into a neon racing poster. Try it with your own selfie.
-```
-
-That is more effective because it gives people a reason to click.
-
-## The Best Creator Loop
-
-Use this loop:
-
-1. Publish eye-catching posts.
-2. Watch which ones get saves, comments, and remixes.
-3. Turn winners into clearer reusable templates.
-4. Share those templates externally.
-5. Reply to comments and remixers.
-6. Make sequels based on what people actually use.
-7. Repeat.
-
-In practice:
-
-```text
-post 10 ideas -> find 2 winners -> make 5 variations -> share the best one -> repeat
-```
-
-## Safety And Trust
-
-Marcelix is built for mainstream creative use.
-
-Avoid:
-
-- unsafe sexual content
-- hateful or abusive content
-- impersonation
-- copying private people without permission
-- exact copyrighted characters or logos
-- misleading political or medical claims
-- harassment
-- illegal content
-
-Good creative work lasts longer when it is safe to remix and safe to share.
-
-## Why Hidden Prompts Matter
-
-Hidden prompts let creators publish strong work without giving away every detail.
-
-That matters because creators often spend time learning:
-
-- wording
-- structure
-- style direction
-- composition language
-- remix patterns
-- reference strategy
-
-Marcelix lets creators share the result and keep the recipe private when they want.
-
-At the same time, public prompts remain useful for creators who want to teach, share, or build openly.
-
-The creator chooses for original posts. Remix posts stay protected automatically.
-
-## A Simple Creator Plan
-
-If you are new, start here:
-
-### Day 1
-
-- Make 5 public posts.
-- Use clear titles.
-- Use honest tags.
-- Hide prompts unless you want to teach.
-- Add real descriptions.
-
-### Day 2
-
-- Check which posts got reactions.
-- Make 3 variations of the strongest idea.
-- Share one externally.
-
-### Day 3
-
-- Create one remix-engine template.
-- Make the result personal and easy to understand.
-- Use a title that tells people what they can become or create.
-
-### Week 1
-
-- Keep publishing.
-- Watch what people remix.
-- Make more of what people actually use.
-- Build a recognizable style.
-
-## Final Idea
-
-Marcelix rewards creative leverage.
-
-One normal post can get a like.
-
-One strong reusable post can become a template.
-
-One strong template can become a remix chain.
-
-One remix chain can become a creator loop.
-
-That is the product:
-
-```text
-make something people want to use, not just something people scroll past
-```
-
+- Product: <a href="https://www.marcelix.com">marcelix.com</a>
+- Explore feed: <a href="https://www.marcelix.com">marcelix.com</a>
+- Pricing: <a href="https://www.marcelix.com/pricing">marcelix.com/pricing</a>
