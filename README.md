@@ -7,7 +7,7 @@
 <h1 align="center"><a href="https://www.marcelix.com">Marcelix</a></h1>
 
 <p align="center">
-  <strong>An AI-native social network for reusable images, videos, remix chains, and creator payouts.</strong>
+  <strong>An AI-native social network for reusable images, short videos, remix chains, and creator rewards.</strong>
 </p>
 
 <p align="center">
@@ -16,19 +16,13 @@
 
 ---
 
-Most AI products are still inference wrappers with an export button.
+Most AI apps stop at generation.
 
-They generate media, hand you a file, maybe add a feed, and then the interesting part dies:
+They produce an output, let the user download it, and lose the rest of the graph: reuse, attribution, follow-on discovery, and any economically meaningful link between the original work and the downstream work.
 
-- the downstream reuse disappears
-- the provenance disappears
-- the monetization collapses into prompt leakage, affiliate spam, or generic engagement farming
+[Marcelix] is built around a different unit:
 
-[Marcelix] makes a different bet:
-
-> the durable object is not the prompt  
-> and it is not the exported file  
-> it is the reusable creative state
+> a public, reusable post that can stay alive inside the network
 
 That changes the loop from:
 
@@ -42,100 +36,78 @@ to:
 private generation -> public post -> reusable source -> remix -> attribution -> reward
 ```
 
-This README is a public system note for [Marcelix]: the object model, the distribution model, the tag layer, and the settlement model.
+This repository is a public product and systems overview for [Marcelix]. It documents the stable user-visible contract:
 
-## The Claim
+- the core objects
+- the discovery model
+- the reuse model
+- the reward and payout rules
+- the prompt privacy model
+- the moderation and trust model
+- the creator-facing behavior that stays stable even when internal providers change
 
-An AI-native network should not optimize only for generation quality.
+It does **not** try to freeze internal provider payloads, anti-abuse thresholds, ranking weights, or back-office tooling as a public contract.
+It is also not presented as a public developer API or provider integration spec.
 
-It should optimize for reusable supply.
+## System Map
 
-That means a strong image or short video should be able to do more than collect impressions. It should be able to:
+```mermaid
+flowchart LR
+    A[Private generation] --> B[Public post]
+    B --> C{Reusable?}
+    C -->|No| D[Feed object only]
+    C -->|Yes| E[Reusable source / template]
+    E --> F[Direct remix by another user]
+    F --> G[Reward event]
+    G --> H[Pending or held]
+    H --> I[Available]
+    I --> J[Convert to credits]
+    I --> K[Payout request]
+    K --> L[Provider processing]
+    L --> M[Paid / rejected / reversed]
+```
 
-- attract followers
-- become a reusable source
-- generate derivative work inside the network
-- preserve attribution across that derivative work
-- create payout-eligible value when downstream paid remixes happen
+## Core Objects
 
-That is the core claim behind [Marcelix].
+| Object | Purpose | Public? | Can it earn? |
+| --- | --- | --- | --- |
+| Private generation | Draft image or video created before publishing | No | No |
+| Public post | Main distribution unit in the feed and on profile pages | Yes | Only if reusable |
+| Reusable post / template | Public post that other users can remix inside the product | Yes | Yes, if eligible paid remixes happen |
+| Remix | A new generation created from a reusable source | Usually yes after publishing | The remixer does not pay the source creator automatically unless the remix is eligible and paid |
+| Reward event | Ledger record created from an eligible paid remix | No | Yes, after settlement |
+| Payout account | Creator payout destination record | No | Required for cash redemption |
+| Payout request | Withdrawal request against available rewards | No | Becomes paid only after review and provider success |
 
-## The State Model
+## What [Marcelix] Optimizes For
 
-The simplest way to understand [Marcelix] is as a state machine for creative objects.
+[Marcelix] is not trying to optimize only for generation quality, or only for passive feed impressions.
 
-### 1. Private generation
+It is optimizing for reusable creative supply:
 
-Everything starts private.
+- work that is strong enough to earn attention
+- clear enough to establish a style or niche
+- reusable enough to create downstream demand
+- attributable enough to preserve the source creator
+- defensible enough to support rewards without turning into spam
 
-Generative work is iterative by default, and a serious system needs a place where creators can test, discard, and compare before anything enters public distribution.
+That is why the public post, not the raw prompt, is the main distribution object.
 
-### 2. Public post
+## Discovery And Growth
 
-The public post is the main distribution unit.
-
-Not the prompt. Not the raw generation row. Not the downloaded asset.
-
-A post carries:
-
-- creator identity
-- media
-- title and description
-- tags
-- visibility
-- remixability
-- provenance
-- engagement
-
-### 3. Reusable source
-
-Once a post is reusable, it stops behaving like ordinary content and starts behaving like upstream infrastructure.
-
-That is the point where [Marcelix] diverges from a normal gallery.
-
-### 4. Remix edge
-
-Remix is not "download this and go do something elsewhere."
-
-It is an in-product transition from one creative state to another. That matters because the system can preserve:
-
-- source attribution
-- remix counts
-- creator growth
-- reward eligibility
-
-## Prompt Privacy Is Part Of The Architecture
-
-Most AI products treat prompt visibility as a UI toggle.
-
-[Marcelix] treats it as a structural rule.
-
-At a high level:
-
-- original posts can choose whether prompt text is public or hidden
-- remix prompts stay private by default
-- the locked source baseline remains server-side
-- remixers control their own edits, not the original creator's full recipe
-
-A reusable network only works if creators can publish valuable work, allow derivative use, and still protect the parts of the process that should remain private.
-
-## The Distribution Model
-
-Creator growth on [Marcelix] is not supposed to depend only on who already follows you.
-
-There are three public feed modes:
+[Marcelix] has three public feed modes:
 
 - `For You`
 - `Trending`
 - `Following`
 
-They are doing different jobs.
+Each one solves a different problem.
 
 ### `Trending`
 
-`Trending` is about momentum, not just popularity.
+`Trending` is about current motion, not all-time popularity.
 
-The ranking combines:
+The public ranking inputs include:
 
 - net voting
 - remix activity
@@ -143,7 +115,7 @@ The ranking combines:
 - freshness
 - age decay
 
-So the system is not only asking "what is popular?" It is asking "what is moving now?"
+The contract here is not a fixed formula. The contract is that `Trending` is supposed to reward current movement, not only historical size.
 
 ### `Following`
 
@@ -152,124 +124,133 @@ So the system is not only asking "what is popular?" It is asking "what is moving
 - creators you follow
 - tags you follow
 
-Then it adds discovery backfill so the graph does not become sparse and brittle.
+Then it can add discovery backfill so the feed does not become sparse, repetitive, or fragile.
 
 ### `For You`
 
-`For You` is the main growth surface because it connects distribution to reuse.
+`For You` is the main creator-growth surface.
 
-Conceptually, it behaves roughly like:
+Conceptually it behaves like:
 
 ```ts
 forYouFeed =
   diversify(
     postsFromFollowedCreators
     + postsFromFollowedTags
-    + adjacentCreativeMatches(sharedTags, titleTerms, promptTerms)
+    + adjacentCreativeMatches(sharedTags, titleTerms, publicPromptTerms)
     + broaderDiscoveryBackfill
   )
 ```
 
-What matters is not the exact weights. What matters is the structure:
+What matters in public docs is the structure:
 
-1. Start from explicit signals.
-2. Expand outward through creative adjacency.
-3. Enforce diversity so one creator or one template family cannot flood the page.
+1. Start from direct follows.
+2. Expand through adjacent creative work.
+3. Prevent one creator or one cluster from flooding the page.
 
-The adjacency step is what stops the feed from collapsing into either pure social-graph ranking or pure popularity ranking. [Marcelix] can move from:
+The hard public constraints matter more than the internal weights:
 
-- creators you already follow
-- tags you already care about
+- public remixes only belong in the main discovery surface if they are themselves reusable
+- one creator is capped before the feed falls back to looser diversity rules
+- one cluster or near-duplicate family is capped before the feed widens again
 
-to related work through:
+That keeps the feed biased toward supply quality instead of derivative noise.
 
-- shared tags
-- shared title language
-- shared prompt-language terms
-- rising related posts
+## Tags Are A Discovery Layer
 
-That makes the feed feel more like a creative recommendation system than a chronological upload stream.
+Tags in [Marcelix] are not only passive metadata.
 
-One subtle rule matters a lot:
+They act as lightweight discovery surfaces:
 
-public remixes only belong in the main discovery surface if they are themselves reusable.
+- users can add them to posts
+- users can search them directly
+- users can follow them directly
+- tag pages can route attention back into a niche
 
-That keeps the feed biased toward creative supply rather than derivative noise.
-
-## Tags Are Not Just Metadata
-
-Most social products treat tags as passive labels.
-
-[Marcelix] treats them more like lightweight discovery surfaces.
-
-There are two classes of tags in the system:
+There are two broad tag classes:
 
 - platform-curated tags
 - creator-originated tags
 
-When a creator introduces a tag that does not already exist, [Marcelix] creates it as a creator tag and binds it back to that user.
+When a creator introduces a new tag, [Marcelix] can bind that tag back to the creator and show attribution such as `Created by @username` in the product.
 
-That has product consequences:
+That matters in a young network because an early creator can turn a good tag into durable profile distribution.
 
-- the tag picker can show `created by @username`
-- tag search and active tag pages can show `Created by @username`
-- users can click directly into the tag surface
-- users can follow tags directly
-- tag search can return matching tags, not only posts
+Important boundary:
 
-In a young network, that means an early creator can turn a good tag into durable profile distribution.
+- tag attribution is not permanent ownership
+- [Marcelix] can rename, merge, feature, suppress, or remove tags
+- generic, abusive, impersonating, or trademark-conflicting tags are not guaranteed stable attribution surfaces
 
-If a creator is early to a useful style, meme format, character archetype, or visual niche and establishes the tag that other people keep reusing, that tag can become a lightweight acquisition channel for the creator profile itself.
+The goal is discovery, not permanent tag property rights.
 
-In practice, that means the tag layer can do three things at once:
+## What Reusable Actually Means
 
-- organize discovery
-- compress social meaning into a reusable label
-- route attention back to the creator who first established the label
+`Reusable` is a concrete product state in [Marcelix].
 
-That gives creators a second distribution channel besides raw follower count.
+It means:
 
-## How Creators Actually Grow
+- the post is public
+- the post is visible
+- remix is enabled for that post
+- another user can create a new generation from that source inside the product
 
-The growth loop on [Marcelix] is not "post more."
+It does **not** mean that every piece of the original creator workflow becomes public.
 
-It is:
+Reusable does not automatically expose:
 
-1. Make a strong image or short video.
-2. Get suggested in `For You`, `Trending`, or tag discovery.
-3. Turn viewers into profile followers.
-4. Publish the strongest work as reusable.
-5. Establish reusable tags around the style or format if the niche is still open.
-6. Let other creators remix the work directly in the network.
-7. Accrue attribution, remix counts, tag-level discovery, and eligible downstream reward value.
+- hidden source prompts
+- every intermediate draft
+- private prompt edits
+- private reference history
+- operational provider metadata
 
-That means creators are not optimizing only for beauty.
+It means the post can function as an upstream remix source inside the network.
 
-They are optimizing for posts that are:
+Important contract details:
 
-- legible in a feed
-- distinct enough to carry style identity
-- reusable enough to create downstream demand
+- rewards attach to the **direct** reusable source used for the remix
+- [Marcelix] does not publicly promise multi-hop revenue sharing across parent, grandparent, and origin chains
+- creators can turn off future reuse for a post
+- existing public remixes, reward events, and payout history remain part of the historical graph and accounting record
 
-The strongest posts on [Marcelix] are not just good outputs.
+## Ownership And Remix Rights
 
-They are good starting points.
+At a product level, [Marcelix] separates:
 
-## The Reward Model
+- ownership of the creative work
+- permission to remix inside the product
+- platform rights to host and display public content
+- reward rights tied to eligible paid reuse
 
-[Marcelix] uses prepaid credits for generation and remix actions.
+The short version is:
 
-The reward side is downstream of paid reuse, not upstream of posting.
+- creators keep ownership of their work subject to the platform terms
+- publishing grants [Marcelix] the rights needed to host, display, distribute, and promote public content inside the service
+- marking a post reusable grants other users permission to remix that work **inside Marcelix**
+- reward eligibility comes from the in-product reuse contract, not from transferring copyright ownership
 
-At a high level, the logic is close to:
+If a creator later turns reuse off:
+
+- new remixes stop
+- existing public remixes do not disappear from history
+- existing reward and payout records stay part of the accounting record
+
+## Reward Model
+
+Creator Rewards in [Marcelix] are an optional incentive layer on top of paid remix activity.
+
+They are **not** wages, salary, or guaranteed income.
+
+At a public-contract level, reward creation looks like this:
 
 ```ts
 if (creatorUserId === remixerUserId) return 0
 
-eligiblePaidCredits =
-  sum(consumedLots where cashoutEligible === true)
+paidCreditPortion =
+  sum(consumedLots where rewardFundingEligible === true)
 
-if (eligiblePaidCredits <= 0) return 0
+if (paidCreditPortion <= 0) return 0
 
 baseReward =
   mediaType === 'video'
@@ -279,33 +260,27 @@ baseReward =
       : standardReward
 
 rewardAmount =
-  baseReward * min(1, eligiblePaidCredits / creditCost)
+  baseReward * min(1, paidCreditPortion / creditCost)
 
 status =
   holdCheck ? 'held' : 'pending'
 ```
 
-That structure is doing several things at once:
+The important points are:
 
 - self-remixes do not earn
-- promo-credit-only remixes do not create cashout-eligible value
-- image and video remixes do not share the same payout lane
-- partially paid-credit remixes can be scaled proportionally
+- promo-only remixes do not earn
+- mixed paid-plus-promo remixes can still earn, but only on the paid-credit portion
+- image and video remixes are not flattened into one reward lane
+- the system can hold events before they become available
 
-So [Marcelix] is not paying for generic engagement. It is paying for eligible paid reuse.
+For a remix to create reward value in the normal case, all of these need to be true:
 
-There are really two gates in the system:
-
-1. Does the remix create a reward event at all?
-2. Does that reward event survive settlement and become available?
-
-For a remix to create reward value in the normal case, the system needs all of the following to be true:
-
-- the source work is published as reusable
-- another user, not the source creator, performs the remix
-- the remix spends at least some purchased credits that are eligible for cashout accounting
-- the reward lane resolves from the actual remix type
-- the event survives the pending window without being reversed or held
+- the source post is public and reusable
+- another user performs the remix
+- the remix uses at least some purchased credits that qualify for reward funding
+- the remix resolves to a public reward lane
+- the event survives the pending window and any risk review
 
 ## Public Reward Lanes
 
@@ -320,98 +295,241 @@ These are the current public reward lanes:
 | Video remix 5s 720p | 1.75 | $0.07 | 1.4 credits |
 | Video remix 10s 720p | 2.25 | $0.09 | 1.8 credits |
 
-The point is not the absolute payout table. The point is that the system recognizes different reuse lanes and prices them differently instead of flattening all derivative work into one fuzzy metric.
+The point is not only the payout table. The point is that [Marcelix] recognizes different reuse lanes and prices them differently.
 
-## The Settlement Model
+## Reward States And Payout States
 
-A reward event on [Marcelix] is not instantly withdrawable cash.
+Reward events and payout requests are separate objects.
 
-There is a settlement path:
+### Reward event states
 
-1. A paid remix happens.
-2. A reward event is created.
-3. The event enters a pending window.
-4. If the underlying transaction remains valid, the reward becomes available.
-5. The creator can convert it to credits or request PayPal withdrawal.
+| State | Meaning |
+| --- | --- |
+| `pending` | Created, but still inside the settlement window |
+| `held` | Created, but temporarily locked for risk or abuse review |
+| `available` | Cleared and usable |
+| `converted` | Converted into Marcelix credits |
+| `requested` | Reserved into a payout request |
+| `paid` | Included in a completed payout |
+| `reversed` | Removed or offset after refund, dispute, reversal, or post-paid correction |
 
-Current public settlement rules:
+### Payout account states
+
+| State | Meaning |
+| --- | --- |
+| `not_connected` | No payout destination on file |
+| `pending` | Destination saved, but not yet fully usable for payout |
+| `verified` | Destination is usable for payout submission |
+| `restricted` | Destination or account is blocked from payout until review |
+
+### Payout request states
+
+| State | Meaning |
+| --- | --- |
+| `pending_review` | Internal review state reserved for requests that exist before queue submission |
+| `submitted` | Accepted into the payout queue |
+| `processing` | Claimed by the worker or in provider processing |
+| `paid` | Provider confirmed success |
+| `rejected` | Request failed or was denied |
+| `reversed` | Request was paid, then later offset through a correction flow |
+| `canceled` | Request was canceled before payout completion |
+
+Current creator cashout requests normally enter `submitted` after eligibility checks pass. `pending_review` remains part of the broader state model for queue-control and manual handling paths.
+
+## Cashout And Provider Reality
+
+The payout path in [Marcelix] is:
+
+1. Connect a PayPal payout destination.
+2. Wait for that destination to become usable for payout.
+3. Let rewards clear the pending window.
+4. Submit a payout request.
+5. Let the payout worker review reserves, request state, and provider outcome.
+
+Current public cashout rules:
 
 - pending window: `7 days`
 - conversion rate: `1 reward = 0.8 credits`
 - cash value: `1 reward = $0.04`
 - minimum cashout: `$50`
 
-That distinction matters because it separates gross remix activity from stable payout value.
+Important public constraints:
 
-## When A Remix Does Not Produce Reward Value
+- payout processing depends on provider availability, reserve health, request review, and payout status
+- a completed payout is not treated as magically irreversible platform money
+- if an underlying paid purchase is later refunded, disputed, or reversed, [Marcelix] can apply balance corrections, negative adjustments, payout restrictions, or future offset logic
 
-These are the common cases where a remix either does not create a reward event or does not survive to settlement in [Marcelix]:
+So the safe public framing is:
+
+> rewards can become withdrawable when eligibility requirements are met
+
+not:
+
+> every reward event is guaranteed cash
+
+## What Does Not Count
+
+These are the common cases where remix activity does not create stable reward value:
 
 - private generations and non-public drafts
 - public posts that are not reusable
 - self-remixes
-- remixes paid only with promo or bonus credits
+- remixes funded only by promo, bonus, or granted credits
 - the promo-credit portion of a mixed paid-plus-promo remix
-- remixes whose underlying paid purchase is later refunded, disputed, or reversed
-- remix activity that is held for abuse review, coordinated farming, or payout-risk review
+- remixes tied to purchases that are later refunded, disputed, or reversed
+- activity held for abuse review, payout-risk review, or coordinated farming review
 
-That is a deliberate choice. [Marcelix] is not rewarding derivative activity in the abstract. It is rewarding attributable reuse that is both paid and defensible.
+## Refunds, Reversals, And Negative Adjustments
 
-## PayPal Settlement Is A Product Surface
+The public rule is simple:
 
-The payout path in [Marcelix] is explicit:
+- unused paid credits can be removed from a reversed purchase
+- linked reward events can also be reversed
+- if already-converted or already-paid value needs to be corrected later, [Marcelix] can create a negative adjustment balance
 
-1. Connect a PayPal payout destination.
-2. Get that destination verified.
-3. Wait for enough rewards to clear the pending window.
-4. Submit a payout request.
-5. Let the payout worker finalize, defer, reject, requeue, or reverse the request based on outcome.
+That negative adjustment must be cleared before new conversion or new payout requests continue.
 
-[Marcelix] tracks a creator through meaningful economic states:
+### Example
 
-- pending
-- available
-- requested
-- paid or reversed
+1. A user buys a paid credit pack.
+2. The user spends part of that pack on remix activity.
+3. Source creators receive pending reward events from the paid-credit portion.
+4. Some of those reward events may later become available, converted, requested, or paid.
+5. If the underlying purchase is later refunded, disputed, or reversed, [Marcelix] can unwind unused credits, reverse linked reward value, and, when needed, apply a negative adjustment to already-processed creator balances.
 
-That is the difference between a cosmetic wallet and an actual settlement system.
+This is one reason [Marcelix] treats rewards as a settlement problem, not as instant cash.
 
-To request PayPal cashout, the creator needs:
+## Reserve Safety
 
-- rewards that have cleared the pending window
-- enough available balance to meet the minimum cashout threshold
-- a verified PayPal payout destination
-- an account in good standing with no active payout hold
+[Marcelix] does not treat gross purchases as free cash.
 
-## What Can Still Block Or Reverse Value
+Before payout submission, the platform tracks reserve pressure across:
 
-Even after a remix happens, [Marcelix] can still block, hold, reduce, or reverse value when:
+- unspent paid-credit liability
+- pending reward liability
+- held reward liability
+- available reward liability
+- requested payout liability
+- payout-fee reserve
 
-- the underlying paid purchase is refunded
-- the underlying paid purchase is disputed
-- abuse patterns or coordinated reward farming are detected
-- the account falls into policy or payout-risk review
-- a payout has already been processed and the underlying transaction is later reversed
+The public contract is not the exact reserve formula. The public contract is that creator payouts are constrained by paid-credit liabilities, reward liabilities, payout fees, and post-purchase reversal risk.
 
-That is not a peripheral policy layer. It is part of the product contract. A creator economy that cannot defend itself does not stay an economy for long.
+## Prompt Privacy
 
-## Why This Is Not A Prompt Marketplace
+Prompt privacy is one of the main [Marcelix] product promises, but the promise is specific.
 
-Prompt marketplaces make the prompt the product.
+The public contract is:
 
-[Marcelix] makes reuse the product.
+- original posts can publish prompts as `public` or `hidden`
+- hidden prompts are removed from the public post and template surface
+- remix prompts are private by default
+- remixers see their own edits, not the source creator's full hidden baseline
+- hidden prompt text is not a public discovery surface
 
-That changes everything downstream:
+The public promise is **not**:
 
-- the public unit is the post, not the raw prompt
-- derivative work stays inside the network
-- provenance survives
-- discovery can care about remixability
-- creator value can come from downstream paid usage instead of prompt leakage or affiliate detours
+- local-only inference
+- zero provider exposure
+- a claim that all operational systems never touch prompt text
 
-That is what makes [Marcelix] feel closer to a creative graph than a static gallery.
+Like every hosted generation product, [Marcelix] has to send generation input to the model stack that produces the output. The privacy promise is about public exposure, remix boundaries, and access control, not about pretending the generation stack does not exist.
 
-## Public Product Surfaces
+## Moderation And Trust
+
+[Marcelix] moderates at multiple layers:
+
+- prompt-time checks
+- generation-time checks
+- publication-time visibility
+- community reports
+- manual review
+
+High-level public behavior:
+
+- violating requests can be blocked before generation
+- public posts can be reported
+- heavily reported posts can be auto-hidden before manual review
+- creators can request manual review
+- admins can restore or remove after review
+- reward and payout flows can be paused if abuse patterns or payout-risk patterns appear
+
+That gives [Marcelix] a fast reaction path without pretending everything is fully automated or fully manual.
+
+## Model Layer
+
+`Marcelin` and `Video Galaxy` are product-facing model lane names inside [Marcelix].
+
+They are not a promise that [Marcelix] owns a proprietary foundation model with that exact name.
+
+The honest public description is:
+
+- [Marcelix] uses leading external image and video model providers behind a product-controlled model layer
+- the provider mix can change over time
+- the product-facing lane names are the stable user surface
+- the exact provider routing is operational, not the public API contract
+
+What *is* stable for users is the lane behavior.
+
+### Image lanes
+
+- `Marcelin ULTRA`
+- `Marcelin PLUS`
+- `Marcelin FAST`
+
+Supported image aspect ratios:
+
+- `1:1`
+- `4:5`
+- `3:4`
+- `16:9`
+- `9:16`
+
+Reference behavior:
+
+- up to 3 image references
+- each image reference adds 1 credit
+
+### Video Galaxy
+
+Supported frames:
+
+- `16:9`
+- `9:16`
+- `1:1`
+- `4:3`
+- `3:4`
+- `3:2`
+- `2:3`
+
+Supported output lanes:
+
+- `5s 480p`
+- `10s 480p`
+- `5s 720p`
+- `10s 720p`
+
+Reference behavior:
+
+- either visual guidance references or a single start frame
+
+### Video Galaxy Pro
+
+Supported frames:
+
+- `16:9`
+- `9:16`
+
+Supported output lanes:
+
+- `4s 720p`
+- `8s 720p`
+- `12s 720p`
+
+Reference behavior:
+
+- one guidance image or one start frame
+
+## Public Surfaces
 
 ### Explore
 
@@ -427,40 +545,25 @@ A post page in [Marcelix] is both media distribution and an upstream remix node.
 
 ### Rewards and settlement
 
-[Marcelix] exposes reward lanes, the pending window, conversion, and PayPal cashout rules directly in the product.
+[Marcelix] exposes reward lanes, the pending window, conversion, and payout rules directly in the product.
 
 <img src="./assets/marcelix-rewards.webp" alt="Marcelix creator rewards and payout rules" width="100%" />
 
-## Why This Might Compound
+## Public Docs In This Repo
 
-A normal AI app produces outputs.
-
-A normal social app produces attention.
-
-[Marcelix] is trying to produce reusable creative supply.
-
-If that works, one strong post can:
-
-- pull in new followers
-- become a reusable source
-- generate a remix chain
-- keep attribution attached to the origin
-- create reward value when downstream paid reuse happens
-
-That is the network effect [Marcelix] is betting on:
-
-not more prompts,  
-not more exports,  
-but more reusable creative work that stays alive inside the network.
-
-## In One Sentence
-
-[Marcelix] is a bet that AI-generated images and videos should not end as disposable files; they should become reusable, attributable, feed-native, and economically connected social objects.
+- [Architecture](./docs/architecture.md)
+- [Rewards and payouts](./docs/rewards-and-payouts.md)
+- [Discovery, tags, and moderation](./docs/discovery-tags-and-moderation.md)
+- [Prompt privacy and model layers](./docs/prompt-privacy-and-model-layers.md)
+- [Security](./SECURITY.md)
 
 ## Links
 
 - Product: <a href="https://www.marcelix.com">marcelix.com</a>
 - Creator Rewards: <a href="https://www.marcelix.com/creator-rewards">marcelix.com/creator-rewards</a>
+- Creator Rewards Policy: <a href="https://www.marcelix.com/creator-rewards-policy">marcelix.com/creator-rewards-policy</a>
+- Help: <a href="https://www.marcelix.com/help">marcelix.com/help</a>
+- Models: <a href="https://www.marcelix.com/models">marcelix.com/models</a>
 - Public post example: <a href="https://www.marcelix.com/post/fa85a896d0d2/hajareddal-cartoon-trailer-the-blue-cat">cartoon trailer - The blue Cat</a>
 
 [Marcelix]: https://www.marcelix.com
