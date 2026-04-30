@@ -2,131 +2,83 @@
 
 This is the public architecture note for [Marcelix].
 
-It documents the stable product contract, not every internal route, worker, or provider payload.
+It describes the stable product structure and the creator-facing system shape.
 
 ## Scope
 
-The stable public contract is:
+This public note covers:
 
-- what objects exist
-- what states they move through
+- the main product objects
 - what is public vs private
-- how reuse, rewards, and payouts relate
-- what creators and users can rely on without learning provider internals
+- how reuse, discovery, rewards, and payout fit together
 
-The non-contract implementation details are:
-
-- exact provider routing
-- exact ranking weights
-- exact anti-abuse thresholds
-- internal admin tools
-- internal database function names
-- provider-specific API payload shapes
-
-This repo is a public product architecture note, not a public SDK or provider integration manual.
+It does not cover the operational implementation details that sit behind the public product contract.
 
 ## High-Level Components
 
 ```mermaid
 flowchart TB
-    A[Web app] --> B[Application server]
-    B --> C[(Postgres / Supabase)]
+    A[Web app] --> B[Application layer]
+    B --> C[(Database)]
     B --> D[(Media storage)]
     B --> E[External model providers]
-    B --> F[Payment providers]
-    B --> G[Payout provider]
-    B --> H[Moderation + report workflow]
+    B --> F[Billing and payout providers]
+    B --> G[Trust and moderation systems]
 ```
 
 At a public level, those components do the following:
 
 | Component | Role |
 | --- | --- |
-| Web app | Publishing, discovery, remixing, rewards UI, payout requests |
-| Application server | Enforces permissions, prompt visibility, reward rules, payout rules |
-| Database | Stores posts, templates, tags, wallets, reward events, payout requests, reports |
-| Media storage | Stores public media, previews, and generated assets |
-| External model providers | Generate the actual image and video outputs |
-| Payment providers | Fund credits through successful paid purchases |
-| Payout provider | Sends approved creator payouts |
-| Moderation/report workflow | Blocks unsafe inputs, hides risky posts, supports manual review |
+| Web app | Creation, publishing, discovery, remixing, rewards UI, support flows |
+| Application layer | Enforces visibility, permissions, reuse rules, rewards, and payout logic |
+| Database | Stores posts, templates, tags, wallets, rewards, requests, reports, and profile state |
+| Media storage | Stores public media and generated assets |
+| External model providers | Generate image and video outputs |
+| Billing and payout providers | Fund credits and process approved payout flows |
+| Trust and moderation systems | Enforce safety, review, and abuse controls |
 
-## Core Object Graph
+## Core Product Objects
 
-```mermaid
-flowchart LR
-    A[Private generation] --> B[Public post]
-    B --> C{Reusable}
-    C -->|Yes| D[Template / source]
-    D --> E[Remix generation]
-    E --> F[Public remix post]
-    E --> G[Reward event]
-    G --> H[Wallet balances]
-    H --> I[Conversion]
-    H --> J[Payout request]
-```
+The main objects are:
 
-## Public Vs Private Surfaces
+- private generations
+- public posts
+- reusable sources
+- remixes
+- creator rewards
+- payout accounts
+- payout requests
+
+Those objects are deliberately separate because generation, publishing, reuse, rewards, and cash redemption are different states with different rules.
+
+## Public Vs Private
 
 | Object | Public surface | Private surface |
 | --- | --- | --- |
-| Private generation | None | Creator draft |
+| Private generation | None | Creator draft and generation context |
 | Public post | Feed, profile, post page | Internal generation metadata |
-| Template / reusable source | Remix entry point, prompt only if explicitly public | Hidden prompt baseline, internal generation context |
-| Reward event | Summary counts and wallet totals | Ledger row, funding link, status history |
-| Payout request | Aggregate wallet state | Provider IDs, review state, settlement events |
-| Report/moderation state | Hidden/visible outcome | Internal review reasoning and report detail |
+| Reusable source | Remix entry point and public post state | Hidden prompt baseline and private context |
+| Reward value | Public creator-facing totals and actions | Internal ledger detail and funding linkage |
+| Payout request | Creator-facing request status | Provider submission detail and review history |
 
-## Reusable Object Contract
+## Reuse Contract
 
-A reusable post in [Marcelix] means:
+A reusable post means:
 
-- the post is public
-- the post is visible
+- it is public
+- it is visible
 - remix is enabled
-- another user can create a new generation from it inside the product
+- other users can create new work from it inside [Marcelix]
 
-It does not mean:
+It does not mean the full original workflow becomes public.
 
-- the source creator's hidden prompt becomes public
-- private drafts become public
-- provider metadata becomes public
-- the product promises multi-hop payout sharing across a remix chain
+The reuse contract is about in-product remixability, not total disclosure.
 
-The public contract is direct-source remixability.
+## Why This Repo Stays Abstract
 
-## Money-Related Objects
+[Marcelix] documents the product contract publicly and keeps operational control logic internal.
 
-[Marcelix] separates these objects on purpose:
-
-- credit purchase
-- credit lot
-- reward event
-- reward wallet
-- payout account
-- payout request
-- payout reversal / negative adjustment
-
-That separation matters because credits, rewards, and payouts are not the same thing.
-
-Examples:
-
-- a user can have paid credits without ever creating a reward event
-- a creator can have available rewards without requesting payout
-- a creator can have a payout request without that request being paid yet
-- a creator can have a negative adjustment after a post-paid correction
-
-## Why The Docs Stay Abstract In Some Places
-
-[Marcelix] documents the object model and state model publicly because those define the user contract.
-
-It does not publish:
-
-- exact fraud thresholds
-- exact ranking weights
-- exact provider failover logic
-- exact moderation heuristics
-
-Those are operational details, not stable user-facing guarantees.
+That boundary is deliberate: the public repo should help users understand how the product behaves without turning into an implementation manual.
 
 [Marcelix]: https://www.marcelix.com

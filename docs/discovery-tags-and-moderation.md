@@ -1,113 +1,83 @@
 # [Marcelix] Discovery, Tags, And Moderation
 
-This note explains how public discovery works in [Marcelix] without turning ranking or moderation internals into a public abuse manual.
+This note explains the public product contract for discovery, creator tags, and trust in [Marcelix].
 
-## Feed Goals
+It focuses on what users can expect from the product rather than the internal tuning behind it.
 
-The discovery system has to do three things at once:
+## Discovery Goals
 
-- reward quality
-- create openings for newer creators
-- keep the feed from collapsing into repetition
+The discovery system in [Marcelix] has to do three things at once:
 
-That is why [Marcelix] uses distinct feed modes instead of one universal ranking list.
+- reward strong work
+- give newer creators a real path into the feed
+- prevent the network from collapsing into repetition or low-quality derivative spam
 
-## Public Ranking Inputs
+That is why [Marcelix] uses multiple public feed surfaces instead of one universal ranking list.
 
-Across the public surfaces, the documented input classes include:
+## Public Discovery Signals
+
+At a public level, [Marcelix] discovery can use signals such as:
 
 - followed creators
 - followed tags
-- shared tags
-- title and public-text overlap
-- net votes
-- remix counts
-- comment counts
+- creative relevance
+- public text context
+- engagement
 - freshness
-- age decay
-- reusable eligibility
+- reusable quality
 
-The stable public contract is the input classes and hard constraints, not the exact weights.
-
-## Hard Constraints
-
-The important public constraints are:
-
-- remixes only compete broadly in public discovery when they are themselves reusable
-- one creator is capped before the feed widens again
-- one near-duplicate cluster is capped before the feed widens again
-- report-hidden or removed content is not treated as normal public inventory
-
-Those rules matter more to trust than the exact numeric weight on a vote or a remix.
+The exact ranking formula is not the public contract. The important public contract is the behavior of the discovery surfaces.
 
 ## Why Tags Matter
 
-Tags in [Marcelix] are:
+Tags in [Marcelix] are discovery surfaces, not just labels.
 
-- searchable
-- followable
-- visible on post surfaces
-- visible on tag pages
-- attributable when they originate from a creator
+They let users:
 
-That makes them a real distribution layer, not just post metadata.
+- categorize public work
+- search into a niche
+- follow creative interests directly
+- discover creators through shared themes or formats
 
-## Tag Attribution Is Not Tag Ownership
+Creator-originated tags matter because they can route attention back to the creator who introduced or established that niche in the network.
 
-Creator-originated tags can display creator attribution in the product.
+That makes tags part of profile growth, not only metadata.
 
-But [Marcelix] does not treat tag attribution as permanent property.
+## Tag Attribution
 
-The platform can:
+[Marcelix] can show creator attribution on creator-originated tags where that improves discovery and context.
 
-- merge tags
-- rename tags
-- feature or suppress tags
-- remove abusive or impersonating tags
-- override squatted or misleading tags
+That attribution helps users understand who established or shaped a tag inside the network.
 
-That keeps the tag system useful without turning it into a permanent land-grab mechanic.
+At the same time, [Marcelix] retains editorial control over public tag surfaces so the product can stay useful, safe, and resistant to abuse.
 
-## Moderation Model
+## Moderation And Trust
 
-[Marcelix] moderates at multiple layers:
+[Marcelix] uses layered trust and moderation systems across:
 
-- prompt-time safety checks
-- generation-time safety checks
-- publication-time visibility rules
-- community reports
+- generation inputs
+- public publishing
+- community reporting
 - manual review
+- creator reward and payout safety
 
-Publicly visible consequences include:
+Publicly, the important contract is:
 
-- request blocked before generation
-- post stays private
-- post goes public
-- post is auto-hidden under report pressure
-- post is restored after review
-- post is removed after review
+- unsafe content can be blocked or limited
+- public content can be reported and reviewed
+- visibility and reward access can be affected by trust and abuse checks
 
-## Report And Review Flow
+This note stays at the product-contract level rather than documenting the internal tuning behind those systems.
 
-At a public level, the report path looks like:
+## Why This Doc Stays Abstract
 
-1. A user reports a public post.
-2. Report pressure and threshold logic determine whether the post stays visible, gets flagged, or is auto-hidden.
-3. The creator can request manual review.
-4. Admin review can restore or remove the post.
+Discovery and moderation are areas where oversharing creates risk.
 
-That gives [Marcelix] a fast protection path while still preserving a manual review step for important decisions.
+So this public note describes:
 
-## Abuse And Reward Interaction
+- what the system is trying to achieve
+- what users can generally expect
 
-Discovery, remix, and rewards are connected.
-
-That means abuse review can affect more than feed visibility. It can also affect:
-
-- reward event state
-- payout eligibility
-- payout account restrictions
-
-This is a necessary boundary in any product where discovery can create money-linked events.
+while intentionally staying above the operational tuning behind those systems.
 
 [Marcelix]: https://www.marcelix.com

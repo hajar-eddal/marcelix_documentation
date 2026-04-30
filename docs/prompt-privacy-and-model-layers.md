@@ -1,55 +1,50 @@
 # [Marcelix] Prompt Privacy And Model Layers
 
-This note documents two things that are easy to confuse:
+This note documents two public contracts in [Marcelix]:
 
 - prompt privacy
-- model branding
-
-They are related, but they are not the same.
+- model lane branding
 
 ## Prompt Privacy Contract
 
-Prompt privacy in [Marcelix] is about **what becomes public** and **what remixers can see**.
+Prompt privacy in [Marcelix] is about what becomes public and what remixers can access.
 
-It is not a claim that generation happens without external providers or that prompt text never enters operational systems.
-
-### Public rules
+The public contract is:
 
 - original posts can choose `public` or `hidden` prompt visibility
 - hidden prompts do not appear on the public post surface
-- hidden prompts do not appear on the public reusable template surface
-- remix prompts are hidden by default
-- remixers only see their own remix-side edits
+- hidden prompts do not appear on the reusable template surface
+- remix prompts are private by default
+- remixers see their own remix-side edits, not the source creator's full hidden baseline
 
-### What stays server-side
+## What The Privacy Promise Means
 
-- the hidden source baseline
-- draft-only prompt history
-- internal generation metadata
-- provider-facing request context needed for generation
+The privacy promise is about:
 
-### What the promise is not
+- public visibility
+- remix boundaries
+- access control
 
-[Marcelix] is not claiming:
+It is not a promise that:
 
-- local-only inference
-- zero provider exposure
-- permanent immutability of every prompt record in every operational system
+- generation happens without external providers
+- prompts never enter operational systems
+- every internal record is immutable forever
 
-The public promise is about surface privacy, access boundaries, and remix boundaries.
+Like other hosted AI products, [Marcelix] has to send generation input through the model stack that produces the output.
 
-## Public Discovery And Hidden Prompts
+## Discovery And Hidden Prompts
 
-The public discovery contract is based on public signals such as:
+Hidden prompt text is not presented as a public discovery surface.
+
+Public discovery is based on visible signals such as:
 
 - follows
 - tags
 - titles
 - descriptions
 - engagement
-- reusable status
-
-Hidden prompt text is not presented as a public discovery surface.
+- reusable state
 
 ## Model Branding Contract
 
@@ -57,83 +52,22 @@ Hidden prompt text is not presented as a public discovery surface.
 
 That means:
 
-- they are the stable user-facing labels
-- they describe expected behavior, not provider identity
-- the external provider mix can change over time
+- they are stable user-facing labels
+- they describe expected behavior, not permanent provider identity
+- the external provider mix behind them can change over time
 
-This is deliberate. The product contract is the lane behavior, not a permanent promise about one named upstream provider forever.
+This note stays focused on the public model-layer contract rather than provider naming or routing internals.
 
-## Image Lanes
+## What Stays Public
 
-Current public image lanes:
+The public contract is the lane behavior users can rely on in the product:
 
-- `Marcelin ULTRA`
-- `Marcelin PLUS`
-- `Marcelin FAST`
+- image lanes
+- video lanes
+- creator-facing pricing
+- creator-facing reference behavior
+- creator-facing capability limits
 
-Supported public image frames:
-
-- `1:1`
-- `4:5`
-- `3:4`
-- `16:9`
-- `9:16`
-
-Reference rules:
-
-- up to 3 reference images
-- each reference image adds 1 credit
-
-## Video Lanes
-
-### `Video Galaxy`
-
-Supported public frames:
-
-- `16:9`
-- `9:16`
-- `1:1`
-- `4:3`
-- `3:4`
-- `3:2`
-- `2:3`
-
-Supported public output lanes:
-
-- `5s 480p`
-- `10s 480p`
-- `5s 720p`
-- `10s 720p`
-
-Reference rules:
-
-- use guidance references or a single start frame
-
-### `Video Galaxy Pro`
-
-Supported public frames:
-
-- `16:9`
-- `9:16`
-
-Supported public output lanes:
-
-- `4s 720p`
-- `8s 720p`
-- `12s 720p`
-
-Reference rules:
-
-- one guidance image or one start frame
-
-## Why The Branding Layer Exists
-
-The branding layer lets [Marcelix]:
-
-- keep the user-facing contract stable
-- tune providers behind the scenes
-- improve reliability without forcing users to learn provider churn
-
-That is a product choice, not an attempt to imply hidden ownership of a foundation model.
+The exact live lane capabilities are documented on the public models page rather than frozen in this repo.
 
 [Marcelix]: https://www.marcelix.com

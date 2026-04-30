@@ -4,8 +4,9 @@ If you believe you found a security issue related to [Marcelix], please report i
 
 ## How To Report
 
-Email:
+Private reporting paths:
 
+- <a href="https://www.marcelix.com/support">marcelix.com/support</a>
 - <a href="mailto:support@marcelix.com">support@marcelix.com</a>
 
 Please include:
