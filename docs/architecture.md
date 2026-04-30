@@ -1,84 +1,71 @@
 # [Marcelix] Architecture
 
-This is the public architecture note for [Marcelix].
+This is not a deployment diagram or an implementation manual.
 
-It describes the stable product structure and the creator-facing system shape.
+It is a short design-decisions note for [Marcelix]: why the product is structured around public posts, reusable sources, remix paths, and creator rewards instead of just generation plus export.
 
-## Scope
+## Design Decision 1: private generation and public post are different objects
 
-This public note covers:
+Most AI apps flatten creation into one thing: you generate, then you publish or download the result.
 
-- the main product objects
-- what is public vs private
-- how reuse, discovery, rewards, and payout fit together
+[Marcelix] splits those states on purpose.
 
-It does not cover the operational implementation details that sit behind the public product contract.
+Private generation is where creators experiment, fail, compare, and iterate. Public posting is where work becomes part of the network. That separation matters because serious creators need room to create privately before anything becomes a public social object.
 
-## High-Level Components
+## Design Decision 2: reusable source is not the same thing as a public post
 
-```mermaid
-flowchart TB
-    A[Web app] --> B[Application layer]
-    B --> C[(Database)]
-    B --> D[(Media storage)]
-    B --> E[External model providers]
-    B --> F[Billing and payout providers]
-    B --> G[Trust and moderation systems]
-```
+Not every public post should automatically become remixable infrastructure.
 
-At a public level, those components do the following:
+That is why [Marcelix] keeps a real distinction between:
 
-| Component | Role |
-| --- | --- |
-| Web app | Creation, publishing, discovery, remixing, rewards UI, support flows |
-| Application layer | Enforces visibility, permissions, reuse rules, rewards, and payout logic |
-| Database | Stores posts, templates, tags, wallets, rewards, requests, reports, and profile state |
-| Media storage | Stores public media and generated assets |
-| External model providers | Generate image and video outputs |
-| Billing and payout providers | Fund credits and process approved payout flows |
-| Trust and moderation systems | Enforce safety, review, and abuse controls |
+- a post that is public
+- a post that is reusable
 
-## Core Product Objects
+Public visibility answers "can people see this?"
 
-The main objects are:
+Reusable answers "can other creators build from this directly inside the product?"
 
-- private generations
-- public posts
-- reusable sources
-- remixes
-- creator rewards
-- payout accounts
-- payout requests
+Those are different permissions, and separating them makes the product more legible for creators.
 
-Those objects are deliberately separate because generation, publishing, reuse, rewards, and cash redemption are different states with different rules.
+## Design Decision 3: prompt privacy is separate from remixability
 
-## Public Vs Private
+In many AI products, remixability and prompt exposure get tangled together.
+
+[Marcelix] treats them separately.
+
+A post can be reusable without forcing the creator to turn the full underlying prompt workflow into a public artifact. That is the product line between:
+
+- a work that can be built from
+- a recipe that must become fully visible
+
+That distinction is one of the main reasons remix can exist here without collapsing into pure prompt leakage.
+
+## Design Decision 4: rewards are downstream of paid reuse, not upstream of attention
+
+[Marcelix] is not trying to pay creators for vague engagement or raw views.
+
+The product is designed so that creator upside appears when a piece of reusable work causes valid downstream paid reuse inside the network. That keeps the reward layer tied to actual creation flow rather than to generic social noise.
+
+## The Main Line Between Public And Private
+
+The simplest design line in [Marcelix] is this:
+
+some objects belong to the creator's private workflow, and some become public network surfaces.
+
+That line is what keeps the product understandable.
 
 | Object | Public surface | Private surface |
 | --- | --- | --- |
 | Private generation | None | Creator draft and generation context |
 | Public post | Feed, profile, post page | Internal generation metadata |
 | Reusable source | Remix entry point and public post state | Hidden prompt baseline and private context |
-| Reward value | Public creator-facing totals and actions | Internal ledger detail and funding linkage |
+| Reward value | Creator-facing totals and actions | Internal ledger detail and funding linkage |
 | Payout request | Creator-facing request status | Provider submission detail and review history |
 
-## Reuse Contract
+## Why This Repo Stays At The Product Layer
 
-A reusable post means:
+[Marcelix] is happy to document the creator-facing contract publicly.
 
-- it is public
-- it is visible
-- remix is enabled
-- other users can create new work from it inside [Marcelix]
-
-It does not mean the full original workflow becomes public.
-
-The reuse contract is about in-product remixability, not total disclosure.
-
-## Why This Repo Stays Abstract
-
-[Marcelix] documents the product contract publicly and keeps operational control logic internal.
-
-That boundary is deliberate: the public repo should help users understand how the product behaves without turning into an implementation manual.
+This repo is meant to help users and technical readers understand the shape of the product, not to publish the operational implementation behind it.
 
 [Marcelix]: https://www.marcelix.com

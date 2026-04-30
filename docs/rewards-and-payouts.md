@@ -2,7 +2,7 @@
 
 This note explains the public contract for Creator Rewards in [Marcelix].
 
-It is written for creators who want to understand how reward value behaves without turning the repo into a payout operations manual.
+It is written for creators who want to understand how reward value behaves, when it can turn into credits or payout value, and where the limits are.
 
 ## Program Positioning
 
@@ -19,6 +19,14 @@ They are not:
 - guaranteed income
 - a promise that every remix event becomes immediate cash
 
+## Frequently Misunderstood
+
+The three biggest misunderstandings are usually:
+
+- rewards are not per-view or per-like; they come from eligible paid remix activity
+- private drafts and non-reusable public posts do not create creator reward value
+- converting reward value into credits is separate from requesting payout
+
 ## What Generally Creates Reward Value
 
 At a public level, reward value can be created when:
@@ -32,7 +40,15 @@ The creator-facing rule is simple:
 
 > rewards attach to the reusable source that was actually remixed
 
-The repo stays at the creator-facing contract level rather than documenting internal accounting and routing logic.
+## Illustrative Example
+
+Imagine Creator A publishes a reusable landscape-style post.
+
+Creator B finds it, remixes it directly inside [Marcelix], and uses paid credits for that remix.
+
+If the remix stays valid through the normal settlement path, Creator A's reward wallet can receive value from that downstream paid reuse.
+
+That is the core mechanic: not views, not reposts, not vague engagement, but direct in-product reuse that remains valid.
 
 ## What Usually Does Not Count
 
@@ -93,8 +109,6 @@ That means:
 - not every region or destination is guaranteed supported
 - payout access can be limited by provider, policy, risk, or compliance constraints
 - provider-side outcomes can affect whether a payout request proceeds, pauses, or fails
-
-This note stays at the product-contract level rather than publishing provider-control or reconciliation internals.
 
 ## Why This Note Stays High Level
 
