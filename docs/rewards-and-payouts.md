@@ -29,7 +29,7 @@ The three biggest misunderstandings are usually:
 
 ## What Generally Creates Reward Value
 
-At a public level, reward value can be created when:
+At a public level, reward value is created when:
 
 - a public reusable source is remixed inside [Marcelix]
 - the remixer is not the original source creator
@@ -46,7 +46,7 @@ Imagine Creator A publishes a reusable landscape-style post.
 
 Creator B finds it, remixes it directly inside [Marcelix], and uses paid credits for that remix.
 
-If the remix stays valid through the normal settlement path, Creator A's reward wallet can receive value from that downstream paid reuse.
+If the remix stays valid through the normal settlement path, Creator A's reward wallet receives value from that downstream paid reuse.
 
 That is the core mechanic: not views, not reposts, not vague engagement, but direct in-product reuse that remains valid.
 
@@ -67,7 +67,7 @@ These common cases do not create stable withdrawable reward value:
 
 That means:
 
-- reward value can be created before it becomes usable
+- reward value is created before it becomes usable
 - usable value can later be corrected if the underlying funding is reversed
 - payout access depends on both product state and provider reality
 

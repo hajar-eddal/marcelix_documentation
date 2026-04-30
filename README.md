@@ -66,7 +66,7 @@ The goal is to explain the product clearly enough to build trust, without turnin
 - some posts become reusable remix sources
 - other users can remix those sources directly inside the product
 - attribution stays attached to the source
-- eligible paid remix activity can create creator rewards
+- eligible paid remix activity creates creator rewards
 
 The public post is the main social object.
 
@@ -99,7 +99,7 @@ Suppose a creator publishes a reusable cartoon trailer or stylized short video i
 
 If the post gets picked up in `For You`, `Trending`, or tag discovery, some viewers follow the creator. One of those viewers can then remix the post directly inside [Marcelix] instead of exporting it and breaking the chain somewhere else.
 
-The remix still points back to the original source. The original creator stays attached. And if that downstream remix uses eligible paid credits and stays valid, the source creator can receive creator reward value from that reuse.
+The remix still points back to the original source. The original creator stays attached. When that downstream remix uses eligible paid credits and stays valid, the source creator earns Creator Rewards from that reuse.
 
 That is the core difference between a post that only gets attention and a post that keeps creating value after publication.
 
@@ -188,7 +188,7 @@ The product is designed so that strong reusable work can keep pulling:
 - more discovery
 - more followers
 - more remixes
-- more creator reward eligibility
+- more creator rewards
 
 ## Prompt Privacy
 
@@ -212,7 +212,7 @@ Creator Rewards are the incentive layer that connects reusable supply to downstr
 
 The creator-facing contract is:
 
-- eligible paid remixes can create creator rewards
+- every eligible paid remix creates creator rewards for the reusable source creator
 - self-remixes do not count
 - promo-only activity does not create stable withdrawable value
 - private drafts and non-reusable public posts do not qualify
@@ -223,6 +223,27 @@ Rewards are attached to the reusable source that was actually remixed.
 Creator Rewards are not wages, salary, or guaranteed income.
 
 They are a platform incentive funded by eligible paid reuse inside the product.
+
+### Reward logic, shortly
+
+1. Publish reusable work.
+2. Another user remixes it with paid credits inside [Marcelix].
+3. The reusable source creator earns Creator Rewards.
+4. The reward lane depends on the remix lane.
+5. After the pending window, rewards move into conversion or payout flow under the public rules shown in the product.
+
+### Current reward lanes
+
+| Remix lane | Creator Reward | Cash value | Credit value |
+| --- | ---: | ---: | ---: |
+| Standard image remix | 0.50 | $0.02 | 0.4 credits |
+| Style-reference image remix | 1.00 | $0.04 | 0.8 credits |
+| Video remix 5s 480p | 1.25 | $0.05 | 1.0 credits |
+| Video remix 10s 480p | 1.50 | $0.06 | 1.2 credits |
+| Video remix 5s 720p | 1.75 | $0.07 | 1.4 credits |
+| Video remix 10s 720p | 2.25 | $0.09 | 1.8 credits |
+
+The live rewards page explains the pending window, conversion, payout, and reversal rules in full.
 
 ## Conversion And Cashout
 
@@ -300,7 +321,6 @@ This is where the economic side becomes concrete for creators: reward value, con
 - [Creator rewards and payouts note](./docs/rewards-and-payouts.md)
 - [Discovery, tags, and moderation note](./docs/discovery-tags-and-moderation.md)
 - [Prompt privacy and model layers note](./docs/prompt-privacy-and-model-layers.md)
-- [Changelog](./CHANGELOG.md)
 - [Security](./SECURITY.md)
 
 ## Links
