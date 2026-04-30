@@ -7,7 +7,7 @@
 <h1 align="center"><a href="https://www.marcelix.com">Marcelix</a></h1>
 
 <p align="center">
-  <strong>An AI-native social network for reusable images, short videos, remix chains, and creator rewards.</strong>
+  <strong>Create. Remix. Earn.</strong>
 </p>
 
 <p align="center">
@@ -16,13 +16,15 @@
 
 ---
 
-Most AI apps stop at generation.
+Most AI apps stop too early.
 
-A creator can post AI work to a mainstream feed, get 50k views, and still come away with almost nothing durable: no remix path, no attribution trail, no way for the next creator to build from it inside the same network, and no clean connection between downstream use and the original creator.
+A creator can make a great image or video, post it to a mainstream feed, get 50k views, and still walk away with almost nothing durable. No remix path. No attribution chain. No clean way for the next creator to build from it inside the same network. No real upside after the first upload.
 
-[Marcelix] is built around a different unit:
+[Marcelix] is built around a different idea:
 
-> a public post that can remain alive inside the network as a reusable source
+> the post should stay alive after publication
+
+Not as a file people export and forget. As a reusable source inside the network.
 
 That changes the loop from:
 
@@ -33,204 +35,88 @@ prompt -> output -> download -> repost -> disappear
 to:
 
 ```text
-private generation -> public post -> reusable source -> remix -> attribution -> creator upside
+private generation -> public post -> remix -> attribution -> profile growth
 ```
 
-This repository is a public product brief for [Marcelix].
+This repo is a short note on what [Marcelix] is, why it is shaped this way, and why creators keep coming back to it.
 
-It focuses on the stable creator-facing contract:
+## Start Here
 
-- what the main objects are
-- how discovery and remixing work at a product level
-- how prompt privacy works at a product level
-- how creator rewards fit into the network
-
-## What This Repo Is Not
-
-This repo is intentionally not:
-
-- the source code for Marcelix
-- the legal terms or policy pages themselves
-- a public developer API
-- a provider integration guide
-- a full internal architecture or abuse-prevention manual
-
-The goal is to explain the product clearly enough to build trust, without turning the repo into a cloning guide or an operational map.
-
-## What [Marcelix] Is
-
-[Marcelix] is designed around a simple idea:
-
-- creators generate images or short videos privately
-- they publish the strongest work publicly
-- some posts become reusable remix sources
-- other users can remix those sources directly inside the product
-- attribution stays attached to the source
-- eligible paid remix activity creates creator rewards
-
-The public post is the main social object.
-
-Not the raw prompt.
-Not the provider request.
-Not the exported file.
-
-## Core Loop
-
-```mermaid
-flowchart LR
-    A[Private generation] --> B[Public post]
-    B --> C{Reusable}
-    C -->|No| D[View and engagement]
-    C -->|Yes| E[Reusable source]
-    E --> F[Direct remix]
-    F --> G[Attribution]
-    F --> H[Creator rewards when eligible]
-```
-
-Here is a live public example of the product object this repo is talking about:
+If you want to see the product object this README is talking about, open a real post:
 
 - [cartoon trailer - The blue Cat](https://www.marcelix.com/post/fa85a896d0d2/hajareddal-cartoon-trailer-the-blue-cat)
 
-## A Concrete Creator Loop
+That page is not just a media page. It is also the remix entry point.
 
-This is easier to understand through a concrete example than through abstract product language.
+## The Core Idea
 
-Suppose a creator publishes a reusable cartoon trailer or stylized short video in a niche that still feels early.
+In [Marcelix], the important object is not the raw prompt and not the exported file.
 
-If the post gets picked up in `For You`, `Trending`, or tag discovery, some viewers follow the creator. One of those viewers can then remix the post directly inside [Marcelix] instead of exporting it and breaking the chain somewhere else.
+It is the public post.
 
-The remix still points back to the original source. The original creator stays attached. When that downstream remix uses eligible paid credits and stays valid, the source creator earns Creator Rewards from that reuse.
+Once a post is reusable, another creator can build from it directly inside the product. The source stays attached. The remix stays inside the graph. The original creator does not vanish the moment someone else uses the work.
 
-That is the core difference between a post that only gets attention and a post that keeps creating value after publication.
+That sounds simple, but it changes a lot:
 
-## Discovery And Growth
+- creators grow from strong posts, not only from follower luck
+- remixing becomes native instead of hacked together through exports
+- tags become real discovery surfaces
+- prompt privacy and remixability can exist together
 
-[Marcelix] has three public feed surfaces:
+## What A Good Post Does Here
 
-- `For You`
-- `Trending`
-- `Following`
+Suppose a creator publishes a strong stylized trailer, character post, or reusable visual format.
 
-They solve different problems.
+If that post lands well, three things happen at once:
 
-- `For You` is the main growth surface. It mixes social intent, creative relevance, reusable quality, freshness, and broader discovery.
-- `Trending` is about current movement, not only historical size.
-- `Following` starts from creators and tags the viewer already chose, then stays usable by widening when needed.
+1. it starts moving through `For You`, `Trending`, and tag discovery
+2. it turns some viewers into followers
+3. it becomes the starting point for direct remixes
 
-The exact internal ranking controls are not the public contract.
+That is the difference between a post that gets attention once and a post that keeps producing attention, remixes, and creator growth after it is published.
 
-The public contract is simpler:
+## Three Design Choices That Matter
 
-- the network should help strong work get discovered
-- the feed should not collapse into low-quality repetition
-- remixable supply matters more than empty activity
-- creators should be able to grow without already being large
+### 1. Public does not automatically mean reusable
 
-That matters because creator growth in [Marcelix] is not supposed to depend only on an existing audience. A creator can grow by publishing work that is:
+A post can be visible without becoming a remix source.
 
-- strong enough to get suggested
-- clear enough to establish a style or niche
-- reusable enough to create downstream demand
+That matters because creators need control over what is simply published and what becomes upstream material for other people to build on.
 
-## Tags Are Part Of Discovery
+### 2. Reusable does not automatically mean prompt leakage
 
-Tags in [Marcelix] are not only labels.
+This is a big one.
 
-They are discovery surfaces:
+In many AI products, remixability and prompt exposure get tangled together. [Marcelix] separates them. A creator can let other people build from a work without turning the full hidden workflow into a public artifact.
 
-- users can add them to posts
-- users can search them directly
-- users can follow them directly
-- tag pages can concentrate a niche
+That is one of the main reasons remix can exist here without collapsing into a race to leak prompts.
 
-Creator-originated tags matter especially in a young network.
+### 3. Tags are distribution, not decoration
 
-If a creator establishes a useful tag early, that tag can route attention back to the creator profile whenever other users search, follow, or explore that niche. The product can show attribution such as `Created by @username` where that helps users understand the origin of the tag.
+Tags in [Marcelix] are not dead metadata.
 
-That makes tags part of creator distribution, not just metadata.
+They are search surfaces, follow surfaces, and niche pages. In a young network, an early good tag can become a real distribution channel for the creator who establishes it. That is especially useful for creators building recognizable styles, formats, or recurring characters.
 
-## What Reusable Means
+## How Creators Grow
 
-`Reusable` is a concrete product state in [Marcelix].
+The growth loop is pretty direct:
 
-At a public level, it means:
+- make something strong enough to stop the scroll
+- publish it as a public post
+- make it reusable if you want downstream remix demand
+- let the feed and tag system do distribution
+- turn viewers into followers
+- turn strong source posts into remixes
 
-- the post is public
-- the post is visible
-- remix is enabled for that post
-- another user can create a new generation from that source inside the product
+That is why [Marcelix] feels different from a gallery. The best posts are not only nice outputs. They are starting points.
 
-It does **not** mean every part of the original workflow becomes public.
+## Paid Remixes
 
-Reusable does not automatically expose:
+This part is simple:
 
-- hidden prompts
-- private drafts
-- private edit history
-- provider metadata
-- internal generation context
+in [Marcelix], a paid remix pays the source creator.
 
-It means the work can function as an upstream source inside the network.
-
-## What Creators Keep
-
-At a product level, [Marcelix] keeps four things connected:
-
-- the creator identity
-- the public post
-- the reusable source
-- the downstream remix path
-
-That means creators are not forced to choose between publishing publicly and losing all future connection to the work once it starts moving.
-
-The product is designed so that strong reusable work can keep pulling:
-
-- more discovery
-- more followers
-- more remixes
-- more creator rewards
-
-## Prompt Privacy
-
-Prompt privacy is one of the core product promises in [Marcelix], but the promise is specific.
-
-The public contract is:
-
-- original posts can publish prompts as `public` or `hidden`
-- hidden prompts are removed from the public post and reusable template surfaces
-- remix prompts are private by default
-- remixers see their own remix-side edits, not the source creator's full hidden baseline
-- hidden prompt text is not a public discovery surface
-
-This is a visibility and access-control promise.
-
-It is not a claim that hosted generation happens without external model providers or without operational systems.
-
-## Creator Rewards
-
-Creator Rewards are the incentive layer that connects reusable supply to downstream paid reuse.
-
-The creator-facing contract is:
-
-- every eligible paid remix creates creator rewards for the reusable source creator
-- self-remixes do not count
-- promo-only activity does not create stable withdrawable value
-- private drafts and non-reusable public posts do not qualify
-- refunded, disputed, reversed, or abuse-reviewed activity can be corrected or removed
-
-Rewards are attached to the reusable source that was actually remixed.
-
-Creator Rewards are not wages, salary, or guaranteed income.
-
-They are a platform incentive funded by eligible paid reuse inside the product.
-
-### Reward logic, shortly
-
-1. Publish reusable work.
-2. Another user remixes it with paid credits inside [Marcelix].
-3. The reusable source creator earns Creator Rewards.
-4. The reward lane depends on the remix lane.
-5. After the pending window, rewards move into conversion or payout flow under the public rules shown in the product.
+The reward lane depends on what got remixed.
 
 ### Current reward lanes
 
@@ -243,79 +129,94 @@ They are a platform incentive funded by eligible paid reuse inside the product.
 | Video remix 5s 720p | 1.75 | $0.07 | 1.4 credits |
 | Video remix 10s 720p | 2.25 | $0.09 | 1.8 credits |
 
-The live rewards page explains the pending window, conversion, payout, and reversal rules in full.
+### The short rulebook
 
-## Conversion And Cashout
+- self-remixes do not count
+- promo-only remixes do not count
+- private drafts do not count
+- non-reusable public posts do not count
+- refunded, disputed, reversed, or abuse-reviewed activity can be corrected or removed
 
-[Marcelix] lets creators use reward value in two ways:
+After rewards clear the pending window, creators can convert them into credits or request PayPal payout under the public rules shown in the product.
 
-- convert eligible rewards into in-product credits
-- request payout when the account, product rules, reserve checks, and provider requirements are satisfied
+If you want the full payout and reversal rules, the live product page explains them better than a giant README ever should:
 
-The live numbers, waiting windows, thresholds, and policy requirements are surfaced in the product and public policy pages rather than frozen in this repo.
+- <a href="https://www.marcelix.com/creator-rewards">marcelix.com/creator-rewards</a>
 
-## Model Layer
+## Prompt Privacy
 
-`Marcelin` and `Video Galaxy` are product-facing lane names in [Marcelix].
+Prompt privacy is one of the hardest parts to get right in a remix product.
 
-That means:
+The line [Marcelix] draws is:
 
-- the names are the stable user surface
-- the provider mix behind them can change
-- the product contract is lane behavior, not upstream provider identity
+- posts can be public
+- sources can be reusable
+- hidden prompts can stay off the public surface
+- remixers see their own remix-side work, not the creator's full hidden baseline
 
-[Marcelix] uses leading external image and video providers behind a product-controlled model layer.
+That line is the real product decision. It is what makes remixing useful without making every good post instantly copyable in the dumbest possible way.
 
-The important public point is that the user-facing lanes stay stable even as the provider layer evolves over time.
+## Model Lanes
 
-## Public Commitments
+[Marcelix] is not a one-model app.
 
-These are the commitments the public product experience is built around:
+Creators use different lanes for different jobs:
 
-- drafts stay private until a creator publishes them
-- hidden prompts stay off public post and template surfaces
-- reusable does not mean full workflow disclosure
-- attribution stays attached to in-product remix paths
-- creator rewards are tied to eligible paid reuse, not vague engagement
-- support, policy, and safety surfaces are public and reachable
+- fast image drafting
+- polished image publishing
+- reference-guided image work
+- short video generation
+- higher-end video lanes for stronger final clips
 
-## Trust Surfaces
+The point of the product layer is stability. Creators should be choosing based on output behavior, speed, format, and cost, not chasing upstream provider churn every month.
 
-Trust is not only policy text. In [Marcelix], it also means public product surfaces that explain how the network behaves:
+That is why the creator-facing lanes stay stable even while the backend evolves.
 
-- support form for account, billing, payout, and abuse issues
-- help center for creator-facing usage questions
-- creator rewards page and policy
-- privacy, terms, refunds, and acceptable-use pages
-- public security reporting instructions
+The live models page is the best place to see the current matrix:
 
-## Public Surfaces
+- <a href="https://www.marcelix.com/models">marcelix.com/models</a>
+
+## What The Screens Show
 
 ### Explore
 
-The home feed is the discovery and reuse surface.
+The home feed is the first distribution layer.
 
 <img src="./assets/marcelix-home.webp" alt="Marcelix explore feed" width="100%" />
 
-This is the first distribution layer. The important thing is not only that posts are visible here, but that the feed is designed to route attention toward work that can continue living inside the network.
+This is where a post starts compounding. It gets discovered, it pulls profile visits, and if it is reusable it can become source material for more creation instead of dying as a one-off upload.
 
 ### Post page
 
-A post page in [Marcelix] is both distribution and an upstream remix node.
+The post page is where the object becomes real.
 
 <img src="./assets/marcelix-post.webp" alt="Marcelix public post page" width="100%" />
 
-This is the remix entry point. The viewer remixes directly from the post, and the original creator stays attached automatically instead of losing attribution across exports and reposts.
+This is the remix entry point. The viewer remixes directly from the post, and the source creator stays attached automatically instead of losing the chain through exports and reposts.
 
 ### Rewards
 
-[Marcelix] exposes creator reward information, payout rules, and creator-side actions directly in the product.
+The reward page is where the creator side becomes concrete.
 
 <img src="./assets/marcelix-rewards.webp" alt="Marcelix creator rewards and payout rules" width="100%" />
 
-This is where the economic side becomes concrete for creators: reward value, conversion to credits, payout readiness, and the creator-facing rules all live in the product instead of being hidden behind a vague promise.
+This is where creators see the reward lanes, the conversion path, the payout path, and the actual rules that turn remix activity into money.
 
-## Public Docs In This Repo
+## Why People Sign Up
+
+Creators do not need another place to dump AI outputs.
+
+They need a place where:
+
+- a strong post keeps working after it is published
+- remixing is native
+- attribution survives
+- followers have a reason to stick
+- paid remixes turn into creator rewards
+
+That is the bet behind [Marcelix].
+
+## If You Want To Dig More
 
 - [Architecture note](./docs/architecture.md)
 - [Creator rewards and payouts note](./docs/rewards-and-payouts.md)
