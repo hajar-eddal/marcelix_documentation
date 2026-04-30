@@ -16,99 +16,122 @@
 
 ---
 
-Most AI apps stop too early.
+AI tools got very good at making images and videos.
 
-A creator can make a great image or video, post it to a mainstream feed, get 50k views, and still walk away with almost nothing durable. No remix path. No attribution chain. No clean way for the next creator to build from it inside the same network. No real upside after the first upload.
+They are still bad at helping creators keep the upside.
 
-[Marcelix] is built around a different idea:
+A creator can make a great AI post, throw it on a mainstream feed, get 50k views, and still leave with nothing durable: no remix path, no attribution chain, no real way for the next creator to build from it, and no clean way to turn strong source work into profile growth.
 
-> the post should stay alive after publication
+[Marcelix] is built around one idea:
 
-Not as a file people export and forget. As a reusable source inside the network.
+> a post should stay useful after it is published
 
-That changes the loop from:
+Not as a file people export and forget.
 
-```text
-prompt -> output -> download -> repost -> disappear
-```
+As a reusable source inside the network.
 
-to:
-
-```text
-private generation -> public post -> remix -> attribution -> profile growth
-```
-
-This repo is a short note on what [Marcelix] is, why it is shaped this way, and why creators keep coming back to it.
-
-## Start Here
+## Open A Real Post
 
 If you want to see the product object this README is talking about, open a real post:
 
 - [cartoon trailer - The blue Cat](https://www.marcelix.com/post/fa85a896d0d2/hajareddal-cartoon-trailer-the-blue-cat)
 
-That page is not just a media page. It is also the remix entry point.
+That page is the actual unit of the network: public media, attribution, remix entry point, and creator profile growth all tied together in one place.
 
-## The Core Idea
+## What Actually Happens
 
-In [Marcelix], the important object is not the raw prompt and not the exported file.
+```mermaid
+flowchart LR
+    A[Private generation] --> B[Public post]
+    B --> C[Feed discovery]
+    B --> D[Tag discovery]
+    B --> E{Reusable}
+    E -->|Yes| F[Direct remix]
+    F --> G[Attribution stays attached]
+    G --> H[Profile growth]
+```
+
+The important shift is simple:
+
+```ts
+if (post.isPublic) {
+  distribute(post)
+}
+
+if (post.isReusable) {
+  allowDirectRemix(post)
+  keepSourceAttached(post)
+}
+```
+
+That is the core difference between a post that gets seen once and a post that keeps doing work after publication.
+
+## Why This Is Better For Creators
+
+In [Marcelix], a strong post can do three jobs at once:
+
+1. get discovered in the feed
+2. turn viewers into followers
+3. become a starting point for direct remixes
+
+That matters because the best post in a creator account should not die as a one-off upload. It should keep pulling people into the profile and keep creating downstream activity.
+
+## The Post Is The Main Object
+
+The important object in [Marcelix] is not the raw prompt and not the exported asset.
 
 It is the public post.
 
-Once a post is reusable, another creator can build from it directly inside the product. The source stays attached. The remix stays inside the graph. The original creator does not vanish the moment someone else uses the work.
+Once a post is reusable:
 
-That sounds simple, but it changes a lot:
+- other creators can build from it directly inside the product
+- the source stays attached
+- the remix stays inside the graph
+- the original creator does not disappear the moment someone else uses the work
 
-- creators grow from strong posts, not only from follower luck
-- remixing becomes native instead of hacked together through exports
-- tags become real discovery surfaces
-- prompt privacy and remixability can exist together
+That sounds obvious. Most AI apps still do not work this way.
 
-## What A Good Post Does Here
-
-Suppose a creator publishes a strong stylized trailer, character post, or reusable visual format.
-
-If that post lands well, three things happen at once:
-
-1. it starts moving through `For You`, `Trending`, and tag discovery
-2. it turns some viewers into followers
-3. it becomes the starting point for direct remixes
-
-That is the difference between a post that gets attention once and a post that keeps producing attention, remixes, and creator growth after it is published.
-
-## Three Design Choices That Matter
+## Three Product Decisions That Matter
 
 ### 1. Public does not automatically mean reusable
 
-A post can be visible without becoming a remix source.
+A creator can publish something publicly without turning it into upstream material for everyone else.
 
-That matters because creators need control over what is simply published and what becomes upstream material for other people to build on.
+That keeps publishing and reuse as two separate choices.
 
 ### 2. Reusable does not automatically mean prompt leakage
 
-This is a big one.
+[Marcelix] keeps remixability and prompt exposure separate.
 
-In many AI products, remixability and prompt exposure get tangled together. [Marcelix] separates them. A creator can let other people build from a work without turning the full hidden workflow into a public artifact.
+A creator can let people build from the work without dumping the full hidden workflow on the public surface.
 
-That is one of the main reasons remix can exist here without collapsing into a race to leak prompts.
+That is one of the main reasons remix can be useful here without turning into a race to leak prompts.
 
 ### 3. Tags are distribution, not decoration
 
-Tags in [Marcelix] are not dead metadata.
+Tags are not dead metadata in [Marcelix].
 
-They are search surfaces, follow surfaces, and niche pages. In a young network, an early good tag can become a real distribution channel for the creator who establishes it. That is especially useful for creators building recognizable styles, formats, or recurring characters.
+They are:
 
-## How Creators Grow
+- search surfaces
+- follow surfaces
+- niche entry points
+- creator distribution channels
 
-The growth loop is pretty direct:
+In a young network, an early useful tag can keep routing attention back to the creator who established that niche.
+
+## How Creators Actually Grow
+
+The growth loop is direct:
 
 - make something strong enough to stop the scroll
-- publish it as a public post
-- make it reusable if you want downstream remix demand
-- let the feed and tag system do distribution
-- turn viewers into followers
+- publish it publicly
+- make it reusable if you want downstream demand
+- let feed discovery and tag discovery do the distribution
+- turn some viewers into followers
 - turn strong source posts into remixes
 
-That is why [Marcelix] feels different from a gallery. The best posts are not only nice outputs. They are starting points.
+That is why [Marcelix] feels different from a gallery. The best posts are not only pretty outputs. They are starting points.
 
 ## Paid Remixes
 
@@ -116,7 +139,18 @@ This part is simple:
 
 in [Marcelix], a paid remix pays the source creator.
 
-The reward lane depends on what got remixed.
+Not per view.
+Not per like.
+Per paid remix.
+
+### Reward logic
+
+```ts
+publishReusablePost()
+someoneRemixesItWithPaidCredits()
+sourceCreatorEarnsReward()
+rewardLaneDependsOnWhatWasRemixed()
+```
 
 ### Current reward lanes
 
@@ -129,7 +163,7 @@ The reward lane depends on what got remixed.
 | Video remix 5s 720p | 1.75 | $0.07 | 1.4 credits |
 | Video remix 10s 720p | 2.25 | $0.09 | 1.8 credits |
 
-### The short rulebook
+### Short rulebook
 
 - self-remixes do not count
 - promo-only remixes do not count
@@ -139,40 +173,40 @@ The reward lane depends on what got remixed.
 
 After rewards clear the pending window, creators can convert them into credits or request PayPal payout under the public rules shown in the product.
 
-If you want the full payout and reversal rules, the live product page explains them better than a giant README ever should:
+For the live reward page:
 
 - <a href="https://www.marcelix.com/creator-rewards">marcelix.com/creator-rewards</a>
 
 ## Prompt Privacy
 
-Prompt privacy is one of the hardest parts to get right in a remix product.
+Prompt privacy is one of the hardest parts of a remix product.
 
 The line [Marcelix] draws is:
 
 - posts can be public
 - sources can be reusable
-- hidden prompts can stay off the public surface
+- hidden prompts stay off the public surface
 - remixers see their own remix-side work, not the creator's full hidden baseline
 
-That line is the real product decision. It is what makes remixing useful without making every good post instantly copyable in the dumbest possible way.
+That is the real product decision. It is what makes remixing useful without making every good post instantly copyable in the dumbest possible way.
 
 ## Model Lanes
 
 [Marcelix] is not a one-model app.
 
-Creators use different lanes for different jobs:
+Creators are not doing one job. They switch between fast drafting, polished publishing, reference-guided image work, and short-form video creation. The product reflects that.
 
-- fast image drafting
-- polished image publishing
-- reference-guided image work
-- short video generation
-- higher-end video lanes for stronger final clips
+| Lane type | What it is for |
+| --- | --- |
+| Fast image lanes | quick drafting, exploration, early remix testing |
+| Polished image lanes | stronger final posts, cleaner publish-ready outputs |
+| Reference-guided image lanes | style control, structure control, tighter creative direction |
+| Short video lanes | quick motion posts, teaser clips, remixable short-form video |
+| Higher-end video lanes | stronger final clips when creators want more polish |
 
-The point of the product layer is stability. Creators should be choosing based on output behavior, speed, format, and cost, not chasing upstream provider churn every month.
+The important thing is stability. Creators should choose based on output behavior, speed, format, and credit cost, not spend their time chasing upstream provider churn.
 
-That is why the creator-facing lanes stay stable even while the backend evolves.
-
-The live models page is the best place to see the current matrix:
+The live models page shows the current matrix:
 
 - <a href="https://www.marcelix.com/models">marcelix.com/models</a>
 
@@ -184,7 +218,7 @@ The home feed is the first distribution layer.
 
 <img src="./assets/marcelix-home.webp" alt="Marcelix explore feed" width="100%" />
 
-This is where a post starts compounding. It gets discovered, it pulls profile visits, and if it is reusable it can become source material for more creation instead of dying as a one-off upload.
+This is where a post starts working. It gets discovered, it pulls profile visits, and if it is reusable it can become source material for more creation instead of dying as a one-off upload.
 
 ### Post page
 
@@ -200,19 +234,19 @@ The reward page is where the creator side becomes concrete.
 
 <img src="./assets/marcelix-rewards.webp" alt="Marcelix creator rewards and payout rules" width="100%" />
 
-This is where creators see the reward lanes, the conversion path, the payout path, and the actual rules that turn remix activity into money.
+This is where creators see the reward lanes, the conversion path, the payout path, and the rules that turn remix activity into money.
 
-## Why People Sign Up
+## Why People Create Accounts
 
 Creators do not need another place to dump AI outputs.
 
 They need a place where:
 
-- a strong post keeps working after it is published
+- a strong post keeps working after publication
 - remixing is native
 - attribution survives
-- followers have a reason to stick
-- paid remixes turn into creator rewards
+- followers have a reason to stay close
+- paid remixes turn into money
 
 That is the bet behind [Marcelix].
 
