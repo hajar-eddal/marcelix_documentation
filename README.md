@@ -184,21 +184,20 @@ Live reward page:
 
 ## Model Lanes
 
-[Marcelix] uses external generation providers behind product-facing model lanes.
+[Marcelix] uses external generation models and shows the real model names in the product. The app is not trying to pretend it is a foundation-model lab; the product layer is the remix graph, prompt privacy boundary, reusable post object, discovery system, and reward accounting around the models.
 
-That is the honest version: Marcelix is not pretending to be a foundation-model lab. The product value is in the creation workflow, remix graph, privacy boundary, post object, discovery layer, and reward system.
+Current creator-facing lanes:
 
-The model page exposes the creator-facing lanes:
+| Model | Best for | Credit behavior |
+| --- | --- | --- |
+| GPT Image 2 | flagship image posts and high-value reusable sources | starts at 2 credits |
+| GPT Image 1.5 | polished OpenAI image generation at standard cost | starts at 1 credit |
+| Seedream 4.5 | portraits, edits, reference-guided images, clean publishing | starts at 1 credit |
+| RiverFlow v2 Fast | quick drafts, remix tests, prompt exploration | starts at 1 credit |
+| Seedance 1.5 Pro | 5s/10s video with optional audio, visual references, first frame, last frame, or first + last frame | silent starts at 2 credits, with-audio starts at 3 credits |
+| Sora 2 | premium 720p OpenAI video with one start frame | 6 to 14 credits |
 
-| Lane | Best for |
-| --- | --- |
-| Fast image | quick concepts, iteration, prompt testing |
-| Polished image | stronger final posts and reusable sources |
-| Reference-guided image | style, pose, structure, outfit, mood, and composition control |
-| Short video | motion posts, teasers, character moments, remixable clips |
-| Higher-end video | sharper video output when polish matters more than speed |
-
-Creator-facing names can stay stable while the generation layer improves behind them.
+Reference images are priced separately from the base image model. Video references, start frames, and end frames are part of the selected video lane when the model supports them.
 
 Current model page:
 

@@ -46,17 +46,17 @@ Public discovery is based on visible signals such as:
 - engagement
 - reusable state
 
-## Model Branding Contract
+## Model Naming Contract
 
-`Marcelin` and `Video Galaxy` are product-facing lane names in [Marcelix].
+[Marcelix] shows real creator-facing model names instead of hiding everything behind house labels.
+
+Current public lanes include GPT Image 2, GPT Image 1.5, Seedream 4.5, RiverFlow v2 Fast, Seedance 1.5 Pro, and Sora 2.
 
 That means:
 
-- they are stable user-facing labels
-- they describe expected behavior, not permanent provider identity
-- the external provider mix behind them can change over time
-
-This note stays focused on the public model-layer contract rather than provider naming or routing internals.
+- creators can choose models by recognizable names
+- Marcelix can still protect provider routing, keys, request shaping, and operational playbooks
+- model lanes can be added or retired as the generation market changes
 
 ## What Stays Public
 
@@ -67,6 +67,8 @@ The public contract is the lane behavior users can rely on in the product:
 - creator-facing pricing
 - creator-facing reference behavior
 - creator-facing capability limits
+
+The current video split is intentionally model-specific: Seedance 1.5 Pro exposes visual references plus first-frame and last-frame controls, while Sora 2 exposes a single start-frame image path.
 
 The exact live lane capabilities are documented on the public models page rather than frozen in this repo.
 
