@@ -50,7 +50,7 @@ Public discovery is based on visible signals such as:
 
 [Marcelix] shows real creator-facing model names instead of hiding everything behind house labels.
 
-Current public lanes include GPT Image 2, GPT Image 1.5, Seedream 4.5, RiverFlow v2 Fast, Seedance 1.5 Pro, and Sora 2.
+Current public lanes include GPT Image 2, GPT Image 1.5, Seedream 4.5, RiverFlow v2 Fast, Seedance 2.0, Seedance 1.5 Pro, and Sora 2.
 
 That means:
 
@@ -68,7 +68,7 @@ The public contract is the lane behavior users can rely on in the product:
 - creator-facing reference behavior
 - creator-facing capability limits
 
-The current video split is intentionally model-specific: Seedance 1.5 Pro exposes visual references plus first-frame and last-frame controls, while Sora 2 exposes a single start-frame image path.
+The current video split is intentionally model-specific: Seedance 2.0 and Seedance 1.5 Pro expose visual references plus first-frame and last-frame controls, while Sora 2 exposes a single start-frame image path.
 
 The exact live lane capabilities are documented on the public models page rather than frozen in this repo.
 

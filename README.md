@@ -190,14 +190,15 @@ Current creator-facing lanes:
 
 | Model | Best for | Credit behavior |
 | --- | --- | --- |
-| GPT Image 2 | flagship image posts and high-value reusable sources | starts at 2 credits |
-| GPT Image 1.5 | polished OpenAI image generation at standard cost | starts at 1 credit |
+| GPT Image 2 | flagship image posts and high-value reusable sources with auto/low/medium/high quality plus 1K/2K/4K size choices | starts at 2 credits |
+| GPT Image 1.5 | polished OpenAI image generation with auto/low/medium/high quality choices | starts at 1 credit |
 | Seedream 4.5 | portraits, edits, reference-guided images, clean publishing | starts at 1 credit |
 | RiverFlow v2 Fast | quick drafts, remix tests, prompt exploration | starts at 1 credit |
-| Seedance 1.5 Pro | 5s/10s video with optional audio, visual references, first frame, last frame, or first + last frame | silent starts at 2 credits, with-audio starts at 3 credits |
+| Seedance 2.0 | premium 4-15s ByteDance video up to 1080p with explicit audio, visual references, first frame, last frame, or first + last frame | starts at 4 credits |
+| Seedance 1.5 Pro | cheaper 4-12s ByteDance video up to 1080p with optional audio, first frame, last frame, or first + last frame | starts at 2 credits |
 | Sora 2 | premium 720p OpenAI video with one start frame | 6 to 14 credits |
 
-Reference images are priced separately from the base image model. Video references, start frames, and end frames are part of the selected video lane when the model supports them.
+Reference images are priced separately from the base image model. Video references, start frames, and end frames are part of the selected video lane when the model supports them. Audio is an explicit choice for models that expose it; Marcelix does not silently turn on audio for video lanes where that would change cost.
 
 Current model page:
 
